@@ -13,6 +13,7 @@ from walle.logger import MissionLogger
 from walle.report import MissionReportGenerator
 from walle.visualizer_ascii import AsciiVisualizer
 from walle.visualizer_html import HtmlVisualizerGenerator
+from walle.visualizer_3d import ThreeJsVisualizerGenerator
 
 
 def run_mission(
@@ -20,6 +21,7 @@ def run_mission(
     visualize: bool = False,
     replay: bool = False,
     generate_html: bool = True,
+    generate_3d: bool = True,
     verbose: bool = False,
     output_dir: str = "traces",
     seed: int = None,
@@ -126,6 +128,17 @@ def run_mission(
         )
         print(f"🌐 Root Visualizer saved to: {root_html}")
 
+    # Generate 3D WebGL Dashboard
+    if generate_3d:
+        three_d_path = os.path.join(os.path.dirname(__file__), "visualizer_3d.html")
+        all_configs = [
+            "configs/mission_01_basic.json",
+            "configs/mission_02_debris_field.json",
+            "configs/mission_03_resource_scarce.json",
+            "configs/mission_04_decoy_signals.json"
+        ]
+        ThreeJsVisualizerGenerator.build_and_save(all_configs, three_d_path)
+
     # Replay if requested
     if replay and ascii_vis:
         print("\nStarting terminal replay...")
@@ -141,6 +154,7 @@ def main():
     parser.add_argument("--visualize", action="store_true", help="Live terminal ASCII visualization")
     parser.add_argument("--replay", action="store_true", help="Replay mission in terminal after completion")
     parser.add_argument("--no-html", action="store_true", help="Disable HTML dashboard generation")
+    parser.add_argument("--no-3d", action="store_true", help="Disable 3D WebGL website generation")
     parser.add_argument("--verbose", action="store_true", help="Print verbose step trace to stdout")
     parser.add_argument("--output-dir", default="traces", help="Directory for output files")
     parser.add_argument("--seed", type=int, default=None, help="Random seed override")
@@ -151,6 +165,7 @@ def main():
         visualize=args.visualize,
         replay=args.replay,
         generate_html=not args.no_html,
+        generate_3d=not args.no_3d,
         verbose=args.verbose,
         output_dir=args.output_dir,
         seed=args.seed,

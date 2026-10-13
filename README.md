@@ -129,14 +129,38 @@ Watch WALL-E explore the terrain in real-time with an ANSI colored ASCII map and
 python3 run_mission.py --config configs/mission_02_debris_field.json --visualize
 ```
 
-### 4. Interactive Web Dashboard
-Open `visualizer.html` directly in any web browser (no web server needed):
+### 4. Interactive 3D WebGL Operations Center
+Open `visualizer_3d.html` directly in any web browser to explore the full Three.js 3D world:
+
+```bash
+open visualizer_3d.html
+```
+
+#### 3D Website Capabilities:
+- 🌐 **Full 3D Procedural Meshes**:
+  - **WALL-E**: Articulated chassis with rubber tread units, binocular optical lenses, solar collector, and dynamic spotlights projecting into the fog.
+  - **EVE**: Sleek glossy floating capsule with glowing cyan visor, hover bobbing animations, and ion thruster light.
+  - **Environment**: Scrap heaps, glowing solar recharge towers with vertical light shafts, and rotating holographic clue rings.
+- 🏔️ **3D Volumetric Bayesian Heatmap**:
+  - Displays a 3D elevation surface over the terrain where height and luminescence are proportional to posterior probability $P(\text{EVE} = (x, y))$, allowing you to watch the probability distribution collapse into high-confidence peaks in real-time.
+- 🎥 **4 Dynamic Camera Modes**:
+  - `Free Orbit`: 360° interactive rotation, tilt, and zoom.
+  - `Follow WALL-E`: Third-person chase camera following behind the robot.
+  - `Tactical Top-Down`: Bird's-eye radar view.
+  - `WALL-E Lens`: First-person perspective looking out through WALL-E's binocular lenses.
+- 🎛️ **Multi-Mission Switcher**:
+  - Switch between all 4 missions seamlessly from the top navigation dropdown.
+- 🔊 **Synthesized Web Audio**:
+  - Procedural sound effects for movements, deep radar pings, clue deciphering, and solar recharging (zero audio files needed).
+
+### 5. Interactive 2D Canvas Dashboard
+Open `visualizer.html` directly in any web browser for the 2D tactical dashboard:
 
 ```bash
 open visualizer.html
 ```
 
-#### Dashboard Features:
+#### 2D Dashboard Features:
 - 🎮 **Playback Controls**: Play, Pause, Step Forward/Back, Reset, and Speed toggles (1x, 2x, 5x).
 - 🎚️ **Scrubber Slider**: Scrub back and forth across every step of the simulation.
 - 🗺️ **Bayesian Heatmap Overlay**: Live toggle showing $P(\text{EVE})$ probability distribution across the grid.
