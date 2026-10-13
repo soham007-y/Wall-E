@@ -1,0 +1,73 @@
+{
+  "mission_name": "Mission 04: Rogue Decoy Beacon",
+  "metrics": {
+    "outcome": "SUCCESS_FOUND_EVE",
+    "total_steps": 21,
+    "time_ticks": 21,
+    "initial_battery": 90,
+    "final_battery": 44,
+    "battery_consumed": 46,
+    "recharge_events": 0,
+    "total_distance_traveled": 17.0,
+    "clues_found": 2,
+    "initial_entropy": 4.422,
+    "final_entropy": 0.099,
+    "entropy_reduction_pct": 97.8,
+    "best_estimate": [
+      15,
+      3
+    ],
+    "best_estimate_confidence_pct": 98.72,
+    "credible_radius": 0.0,
+    "inferred_status": "DORMANT_REBOOT_REQUIRED",
+    "localization_error_euclidean": 2.0
+  },
+  "recommended_next_step": "Initiate physical interface protocol at coordinates (15, 3). Connect auxiliary solar jumper cable and broadcast reboot authorization code 2105-A.",
+  "top_candidates": [
+    {
+      "coord": [
+        15,
+        3
+      ],
+      "prob": 0.9872
+    },
+    {
+      "coord": [
+        15,
+        2
+      ],
+      "prob": 0.0128
+    },
+    {
+      "coord": [
+        15,
+        4
+      ],
+      "prob": 0.0
+    }
+  ],
+  "ground_truth": {
+    "eve_true_position": [
+      13,
+      3
+    ],
+    "eve_status": "DORMANT_REBOOT_REQUIRED",
+    "total_clues": 2,
+    "discovered_clues_count": 2,
+    "obstacles_count": 8,
+    "recharge_stations": [
+      [
+        12,
+        10
+      ],
+      [
+        3,
+        2
+      ],
+      [
+        9,
+        4
+      ]
+    ]
+  }
+}

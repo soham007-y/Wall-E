@@ -1,0 +1,69 @@
+{
+  "mission_name": "Mission 01: Initial Signal Beacon",
+  "metrics": {
+    "outcome": "SUCCESS_FOUND_EVE",
+    "total_steps": 67,
+    "time_ticks": 67,
+    "initial_battery": 100,
+    "final_battery": 67,
+    "battery_consumed": 123,
+    "recharge_events": 6,
+    "total_distance_traveled": 60.0,
+    "clues_found": 1,
+    "initial_entropy": 2.054,
+    "final_entropy": 0.0,
+    "entropy_reduction_pct": 100.0,
+    "best_estimate": [
+      10,
+      10
+    ],
+    "best_estimate_confidence_pct": 100.0,
+    "credible_radius": 0.0,
+    "inferred_status": "DORMANT_REBOOT_REQUIRED",
+    "localization_error_euclidean": 0.0
+  },
+  "recommended_next_step": "Initiate physical interface protocol at coordinates (10, 10). Connect auxiliary solar jumper cable and broadcast reboot authorization code 2105-A.",
+  "top_candidates": [
+    {
+      "coord": [
+        10,
+        10
+      ],
+      "prob": 1.0
+    },
+    {
+      "coord": [
+        10,
+        9
+      ],
+      "prob": 0.0
+    },
+    {
+      "coord": [
+        9,
+        9
+      ],
+      "prob": 0.0
+    }
+  ],
+  "ground_truth": {
+    "eve_true_position": [
+      10,
+      10
+    ],
+    "eve_status": "DORMANT_REBOOT_REQUIRED",
+    "total_clues": 2,
+    "discovered_clues_count": 1,
+    "obstacles_count": 6,
+    "recharge_stations": [
+      [
+        8,
+        2
+      ],
+      [
+        3,
+        3
+      ]
+    ]
+  }
+}

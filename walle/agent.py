@@ -7,7 +7,7 @@ from typing import Any, Dict, List, Optional, Set, Tuple
 
 from walle.belief import BayesianBeliefMap, BeliefSummary
 from walle.config import MissionConfig
-from walle.environment import ActionType, DIRECTION_OFFSETS, Observation
+from walle.environment import ActionType, DIRECTION_OFFSETS, MissionStatus, Observation
 from walle.planner import GridPlanner
 
 
@@ -60,6 +60,11 @@ class AutonomousWallEAgent:
                 self.known_recharge_stations.add(tile_coord)
 
         # 2. Update Bayesian belief with sensor reading
+        # If WALL-E is on this cell and EVE was not found, this cell cannot be EVE
+        if obs.position in self.belief.grid and obs.mission_status != MissionStatus.SUCCESS_FOUND_EVE:
+            self.belief.grid[obs.position] = 0.0
+            self.belief._normalize()
+
         if obs.rssi is not None and obs.position != self.last_scanned_pos:
             self.belief.update_sensor_measurement(obs.position, obs.rssi, obs.bearing_deg)
             self.last_scanned_pos = obs.position
@@ -184,16 +189,24 @@ class AutonomousWallEAgent:
         summary: BeliefSummary
     ) -> Tuple[int, int]:
         """Select best destination balancing posterior probability and path distance."""
-        # Top candidates
         best_target = summary.best_estimate
         best_score = -999999.0
 
-        for (cand, prob) in summary.top_candidates[:5]:
-            if cand in self.known_obstacles:
-                continue
+        # Sort all non-obstacle cells by probability
+        candidates = [c for c in summary.top_candidates if c[0] not in self.known_obstacles and c[0] != current_pos]
+        if not candidates:
+            # Fallback to any unvisited cell with non-zero probability
+            candidates = sorted(
+                [(coord, prob) for coord, prob in self.belief.grid.items() if coord not in self.known_obstacles and coord != current_pos],
+                key=lambda x: x[1],
+                reverse=True
+            )[:10]
+
+        for (cand, prob) in candidates:
             dist = abs(cand[0] - current_pos[0]) + abs(cand[1] - current_pos[1])
-            # High probability rewarded, excessive distance penalized
-            score = prob * 100.0 - dist * 0.5
+            # Bonus for unvisited tiles, penalty for already visited
+            visit_penalty = 50.0 if cand in self.visited_tiles else 0.0
+            score = prob * 100.0 - dist * 0.5 - visit_penalty
             if score > best_score:
                 best_score = score
                 best_target = cand

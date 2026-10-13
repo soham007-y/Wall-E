@@ -1,0 +1,73 @@
+{
+  "mission_name": "Mission 02: Scrap Debris Canyon",
+  "metrics": {
+    "outcome": "SUCCESS_FOUND_EVE",
+    "total_steps": 33,
+    "time_ticks": 33,
+    "initial_battery": 100,
+    "final_battery": 31,
+    "battery_consumed": 69,
+    "recharge_events": 0,
+    "total_distance_traveled": 30.0,
+    "clues_found": 1,
+    "initial_entropy": 6.517,
+    "final_entropy": 0.0,
+    "entropy_reduction_pct": 100.0,
+    "best_estimate": [
+      15,
+      13
+    ],
+    "best_estimate_confidence_pct": 100.0,
+    "credible_radius": 0.0,
+    "inferred_status": "DORMANT_REBOOT_REQUIRED",
+    "localization_error_euclidean": 1.0
+  },
+  "recommended_next_step": "Initiate physical interface protocol at coordinates (15, 13). Connect auxiliary solar jumper cable and broadcast reboot authorization code 2105-A.",
+  "top_candidates": [
+    {
+      "coord": [
+        15,
+        13
+      ],
+      "prob": 1.0
+    },
+    {
+      "coord": [
+        13,
+        14
+      ],
+      "prob": 0.0
+    },
+    {
+      "coord": [
+        14,
+        13
+      ],
+      "prob": 0.0
+    }
+  ],
+  "ground_truth": {
+    "eve_true_position": [
+      14,
+      13
+    ],
+    "eve_status": "DAMAGED_THRUSTER",
+    "total_clues": 3,
+    "discovered_clues_count": 1,
+    "obstacles_count": 21,
+    "recharge_stations": [
+      [
+        13,
+        3
+      ],
+      [
+        8,
+        5
+      ],
+      [
+        2,
+        2
+      ]
+    ]
+  }
+}

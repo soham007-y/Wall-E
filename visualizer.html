@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WALL-E & EVE Mission Operations Dashboard</title>
+<style>
+  :root {
+    --bg-dark: #0b0f19;
+    --bg-card: #151d30;
+    --bg-panel: #111726;
+    --border: #232f48;
+    --accent-cyan: #00f0ff;
+    --accent-yellow: #ffd000;
+    --accent-green: #00ff88;
+    --accent-red: #ff3366;
+    --text-primary: #e6edfa;
+    --text-muted: #8a99b5;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, monospace; }
+  body { background: var(--bg-dark); color: var(--text-primary); display: flex; flex-direction: column; height: 100vh; overflow: hidden; }
+  
+  /* Top Nav */
+  header { background: var(--bg-panel); border-bottom: 1px solid var(--border); padding: 12px 24px; display: flex; justify-content: space-between; align-items: center; }
+  .title-group { display: flex; align-items: center; gap: 12px; }
+  .logo { font-size: 24px; }
+  .badge { background: rgba(0,240,255,0.15); color: var(--accent-cyan); border: 1px solid var(--accent-cyan); padding: 3px 8px; border-radius: 4px; font-size: 11px; text-transform: uppercase; font-weight: bold; }
+  .badge.success { background: rgba(0,255,136,0.15); color: var(--accent-green); border-color: var(--accent-green); }
+  .badge.failed { background: rgba(255,51,102,0.15); color: var(--accent-red); border-color: var(--accent-red); }
+
+  /* Main Layout */
+  .main-container { display: flex; flex: 1; overflow: hidden; }
+  
+  /* Left / Canvas Area */
+  .viewport-area { flex: 1.3; display: flex; flex-direction: column; padding: 16px; border-right: 1px solid var(--border); }
+  .canvas-container { flex: 1; display: flex; justify-content: center; align-items: center; background: #080b12; border: 1px solid var(--border); border-radius: 8px; position: relative; overflow: hidden; }
+  canvas { box-shadow: 0 0 20px rgba(0,0,0,0.5); border-radius: 4px; }
+
+  /* Controls */
+  .control-bar { margin-top: 12px; background: var(--bg-card); padding: 12px 16px; border-radius: 8px; border: 1px solid var(--border); display: flex; flex-direction: column; gap: 8px; }
+  .slider-row { display: flex; align-items: center; gap: 12px; }
+  .slider-row input[type=range] { flex: 1; accent-color: var(--accent-cyan); height: 6px; cursor: pointer; }
+  .btn-row { display: flex; justify-content: space-between; align-items: center; }
+  .btn-group { display: flex; gap: 8px; }
+  button { background: var(--bg-panel); color: var(--text-primary); border: 1px solid var(--border); padding: 6px 14px; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: 500; transition: all 0.2s; }
+  button:hover { border-color: var(--accent-cyan); color: var(--accent-cyan); }
+  button.active { background: rgba(0,240,255,0.2); border-color: var(--accent-cyan); color: var(--accent-cyan); }
+  
+  /* Right / Telemetry & Dossier */
+  .telemetry-area { flex: 1; display: flex; flex-direction: column; overflow-y: auto; background: var(--bg-dark); }
+  .tabs { display: flex; border-bottom: 1px solid var(--border); background: var(--bg-panel); }
+  .tab-btn { flex: 1; padding: 12px; border: none; border-radius: 0; background: transparent; text-align: center; font-size: 13px; border-bottom: 2px solid transparent; color: var(--text-muted); }
+  .tab-btn.active { color: var(--accent-cyan); border-bottom-color: var(--accent-cyan); background: rgba(0,240,255,0.05); }
+  
+  .tab-content { padding: 16px; flex: 1; overflow-y: auto; display: none; }
+  .tab-content.active { display: block; }
+
+  /* Telemetry Cards */
+  .metric-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 16px; }
+  .metric-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; padding: 12px; }
+  .metric-title { font-size: 11px; color: var(--text-muted); text-transform: uppercase; margin-bottom: 4px; }
+  .metric-val { font-size: 18px; font-weight: bold; color: var(--accent-cyan); }
+  
+  /* Battery Meter */
+  .battery-container { margin: 12px 0; }
+  .battery-bar-bg { background: #080b12; height: 12px; border-radius: 6px; overflow: hidden; border: 1px solid var(--border); }
+  .battery-fill { height: 100%; width: 100%; background: var(--accent-green); transition: width 0.3s; }
+  
+  .reasoning-box { background: rgba(0,240,255,0.05); border-left: 3px solid var(--accent-cyan); padding: 12px; border-radius: 4px; margin-top: 12px; font-size: 13px; line-height: 1.5; }
+  .clue-item { background: var(--bg-card); border: 1px solid var(--border); border-radius: 6px; padding: 12px; margin-bottom: 8px; }
+  .clue-badge { font-size: 10px; background: rgba(255,208,0,0.15); color: var(--accent-yellow); padding: 2px 6px; border-radius: 3px; font-weight: bold; display: inline-block; margin-bottom: 4px; }
+
+  /* Legend */
+  .legend { display: flex; gap: 12px; font-size: 11px; margin-top: 6px; flex-wrap: wrap; }
+  .legend-item { display: flex; align-items: center; gap: 4px; }
+  .legend-box { width: 10px; height: 10px; border-radius: 2px; }
+  
+  pre { background: #080b12; padding: 16px; border-radius: 6px; border: 1px solid var(--border); font-size: 12px; overflow-x: auto; white-space: pre-wrap; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="title-group">
+    <div class="logo">🤖</div>
+    <div>
+      <h2 style="font-size: 16px; font-weight: 600;">Mission 04: Rogue Decoy Beacon</h2>
+      <p style="font-size: 12px; color: var(--text-muted);">A malfunctioning Buy n Large probe broadcasting a decoy signal. The agent must interpret clues to isolate the true target.</p>
+    </div>
+  </div>
+  <div>
+    <span class="badge success">SUCCESS_FOUND_EVE</span>
+  </div>
+</header>
+
+<div class="main-container">
+  <!-- Viewport Canvas Area -->
+  <div class="viewport-area">
+    <div class="canvas-container">
+      <canvas id="gridCanvas" width="600" height="600"></canvas>
+    </div>
+
+    <!-- Controls -->
+    <div class="control-bar">
+      <div class="slider-row">
+        <span style="font-size: 12px; font-weight: bold; width: 60px;">STEP <span id="currentStepText">0</span></span>
+        <input type="range" id="stepSlider" min="0" max="20" value="0">
+        <span style="font-size: 12px; color: var(--text-muted); width: 40px; text-align: right;">/ 20</span>
+      </div>
+
+      <div class="btn-row">
+        <div class="btn-group">
+          <button id="btnPrev">◀ Prev</button>
+          <button id="btnPlay">▶ Play</button>
+          <button id="btnNext">Next ▶</button>
+          <button id="btnReset">Reset</button>
+        </div>
+        <div class="btn-group">
+          <button id="btnHeatmap" class="active">Heatmap: ON</button>
+          <button id="btnSpeed">1x</button>
+        </div>
+      </div>
+
+      <div class="legend">
+        <div class="legend-item"><div class="legend-box" style="background:#ffd000;"></div> WALL-E</div>
+        <div class="legend-item"><div class="legend-box" style="background:#00ff88;"></div> Solar Station</div>
+        <div class="legend-item"><div class="legend-box" style="background:#3a4b6e;"></div> Scrap Pile</div>
+        <div class="legend-item"><div class="legend-box" style="background:#ff3366;"></div> EVE Peak Target</div>
+        <div class="legend-item"><div class="legend-box" style="background:#a855f7;"></div> Clue Beacon</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Telemetry & Intel Area -->
+  <div class="telemetry-area">
+    <div class="tabs">
+      <button class="tab-btn active" onclick="switchTab('telemetry')">Live Telemetry</button>
+      <button class="tab-btn" onclick="switchTab('clues')">Dossier (2)</button>
+      <button class="tab-btn" onclick="switchTab('report')">Mission Report</button>
+    </div>
+
+    <!-- Live Telemetry Tab -->
+    <div id="tab-telemetry" class="tab-content active">
+      <div class="metric-grid">
+        <div class="metric-card">
+          <div class="metric-title">Agent Mode</div>
+          <div class="metric-val" id="valMode" style="font-size: 15px;">EXPLORATION</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-title">Last Action</div>
+          <div class="metric-val" id="valAction" style="color: var(--accent-yellow); font-size: 15px;">-</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-title">WALL-E Position</div>
+          <div class="metric-val" id="valPos">(0, 0)</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-title">Peak Coordinate</div>
+          <div class="metric-val" id="valPeak" style="color: var(--accent-red);">(0, 0)</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-title">Shannon Entropy</div>
+          <div class="metric-val" id="valEntropy">0.00 bits</div>
+        </div>
+        <div class="metric-card">
+          <div class="metric-title">Peak Confidence</div>
+          <div class="metric-val" id="valConfidence">0.0%</div>
+        </div>
+      </div>
+
+      <div class="battery-container">
+        <div style="display: flex; justify-content: space-between; font-size: 12px; margin-bottom: 4px;">
+          <span>BATTERY CHARGE</span>
+          <span id="valBatteryText" style="font-weight: bold; color: var(--accent-green);">100%</span>
+        </div>
+        <div class="battery-bar-bg">
+          <div id="batteryFill" class="battery-fill"></div>
+        </div>
+      </div>
+
+      <div class="metric-card" style="margin-top: 12px;">
+        <div class="metric-title">Inferred EVE Status</div>
+        <div class="metric-val" id="valStatus" style="font-size: 14px; color: var(--accent-cyan);">DORMANT_REBOOT_REQUIRED</div>
+      </div>
+
+      <div class="reasoning-box">
+        <div style="font-size: 11px; text-transform: uppercase; color: var(--accent-cyan); margin-bottom: 4px; font-weight: bold;">Tactical Rationale</div>
+        <div id="valReasoning">Awaiting first step...</div>
+      </div>
+    </div>
+
+    <!-- Clues Dossier Tab -->
+    <div id="tab-clues" class="tab-content">
+      <div id="cluesList">
+        <!-- Rendered via JS -->
+      </div>
+    </div>
+
+    <!-- Report Tab -->
+    <div id="tab-report" class="tab-content">
+      <pre id="reportMarkdownText"></pre>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Mission Data
+  const traces = [{"step_number": 1, "time_tick": 1, "action": "MOVE_S", "action_cost": 2, "battery_before": 90, "battery_after": 88, "position": [1, 2], "observation_rssi": -42.58, "observation_bearing_deg": 7.6, "inspected_clue": null, "agent_mode": "EXPLORING", "agent_reasoning": "Navigating toward high-likelihood target (14, 3) (peak 9.7%, entropy 4.42). Next waypoint: (1, 2).", "target_coord": [14, 3], "belief_entropy": 4.422, "belief_peak_coord": [14, 3], "belief_peak_prob": 0.0972, "inferred_status": "DORMANT_REBOOT_REQUIRED", "status_message": "Moved to (1, 2)."}, {"step_number": 2, "time_tick": 2, "action": "MOVE_S", "action_cost": 2, "battery_before": 88, "battery_after": 86, "position": [1, 3], "observation_rssi": -42.58, "observation_bearing_deg": 7.6, "inspected_clue": null, "agent_mode": "EXPLORING", "agent_reasoning": "Navigating toward high-likelihood target (14, 3) (peak 16.0%, entropy 3.68). Next waypoint: (1, 3).", "target_coord": [14, 3], "belief_entropy": 3.685, "belief_peak_coord": [14, 3], "belief_peak_prob": 0.16, "inferred_status": "DORMANT_REBOOT_REQUIRED", "status_message": "Moved to (1, 3)."}, {"step_number": 3, "time_tick": 3, "action": "MOVE_S", "action_cost": 2, "battery_before": 86, "battery_after": 84, "position": [1, 4], "observation_rssi": -42.58, "observation_bearing_deg": 7.6, "inspected_clue": null, "agent_mode": "EXPLORING", "agent_reasoning": "Navigating toward high-likelihood target (14, 4) (peak 21.6%, entropy 3.23). Next waypoint: (1, 4).", "target_coord": [14, 4], "belief_entropy": 3.233, "belief_peak_coord": [14, 4], "belief_peak_prob": 0.2156, "inferred_status": "DORMANT_REBOOT_REQUIRED", "status_message": "Moved to (1, 4)."}, {"step_number": 4, "time_tick": 4, "action": "MOVE_E", "action_cost": 2, "battery_before": 84, "battery_after": 82, "position": [2, 4], "observation_rssi": -42.58, "observation_bearing_deg": 7.6, "inspected_clue": null, "agent_mode": "EXPLORING", "agent_reasoning": "Navigating toward high-likelihood target (14, 4) (peak 25.0%, entropy 2.91). Next waypoint: (2, 4).", "target_coord": [14, 4], "belief_entropy": 2.911, "belief_peak_coord": [14, 4], "belief_peak_prob": 0.2495, "inferred_status": "DORMANT_REBOOT_REQUIRED", "status_message": "Moved to (2, 4)."}, {"step_number": 5, "time_tick": 5, "action": "INSPECT", "action_cost": 3, "battery_before": 82, "battery_after": 79, "position": [2, 4], "observation_rssi": -42.58, "observation_bearing_deg": 7.6, "inspected_clue": {"id": "clue_decoy_alert", "x": 3, "y": 4, "description": "Radio spectrum analysis: Rogue BnL probe transmitting decoy ping at (4, 12). Disregard Southern sector y > 8.", "type": "sector_elimination", "payload": {"x_min": 0, "x_max": 15, "y_min": 9, "y_max": 15}}, "agent_mode": "INSPECTING_CLUE", "agent_reasoning": "Proximity radar detected physical clue or telemetry beacon signature. Deciphering clue payload.", "target_coord": [2, 4], "belief_entropy": 2.536, "belief_peak_coord": [15, 5], "belief_peak_prob": 0.2969, "inferred_status": "DORMANT_REBOOT_REQUIRED", "status_message": "Clue deciphered [clue_decoy_alert]: 'Radio spectrum analysis: Rogue BnL probe transmitting decoy ping at (4, 12). Disregard Southern sector y > 8.'."}, {"step_number": 6, "time_tick": 6, "action": "SCAN", "action_cost": 4, "battery_before": 79, "battery_after": 75, "position": [2, 4], "observation_rssi": -43.45, "observation_bearing_deg": 354.5, "inspected_clue": null, "agent_mode": "TRIANGULATING", "agent_reasoning": "Belief entropy is 2.54 bits. Dispatched directional radar ping to triangulate EVE's signal from current position (2, 4).", "target_coord": [2, 4], "belief_entropy": 2.536, "belief_peak_coord": [15, 5], "belief_peak_prob": 0.2969, "inferred_status": "DORMANT_REBOOT_REQUIRED", "status_message": "Deep radar ping: RSSI -43.5 dBm, bearing 354.5\u00b0."}, {"step_number": 7, "time_tick": 7, "action": "MOVE_S", "action_cost": 2, "battery_before": 75, "battery_after": 73, "position": [2, 5], "observation_rssi": -43.45, "observation_bearing_deg": 354.5, "inspected_clue": null, "agent_mode": "EXPLORING", "agent_reasoning": "Navigating toward high-likelihood target (15, 5) (peak 29.7%, entropy 2.54). Next waypoint: (2, 5).", "target_coord": [15, 5], "belief_entropy": 2.536, "belief_peak_coord": [15, 5], "belief_peak_prob": 0.2969, "inferred_status": "DORMANT_REBOOT_REQUIRED", "status_message": "Moved to (2, 5)."}, {"step_number": 8, "time_tick": 8, "action": "MOVE_N", "action_cost": 2, "battery_before": 73, "battery_after": 71, "position": [2, 4], "observation_rssi": -43.45, "observation_bearing_deg": 354.5, "inspected_clue": null, "agent_mode": "CONVERGING", "agent_reasoning": "Navigating toward high-likelihood target (15, 4) (peak 39.7%, entropy 2.05). Next waypoint: (2, 4).", "target_coord": [15, 4], "belief_entropy": 2.048, "belief_peak_coord": [15, 4], "belief_peak_prob": 0.3974, "inferred_status": "DORMANT_REBOOT_REQUIRED", "status_message": "Moved to (2, 4)."}, {"step_number": 9, "time_tick": 9, "action": "MOVE_E", "action_cost": 2, "battery_before": 71, "battery_after": 69, "position": [3, 4], "observation_rssi": -43.45, "observation_bearing_deg": 354.5, "inspected_clue": null, "agent_mode": "CONVERGING", "agent_reasoning": "Navigating toward high-likelihood target (15, 4) (peak 62.9%, entropy 1.56). Next waypoint: (3, 4).", "target_coord": [15, 4], "belief_entropy": 1.564, "belief_peak_coord": [15, 4], "belief_peak_prob": 0.6287, "inferred_status": "DORMANT_REBOOT_REQUIRED", "status_message": "Moved to (3, 4)."}, {"step_number": 10, "time_tick": 10, "action": "MOVE_N", "action_cost": 2, "battery_before": 69, "battery_after": 67, "position": [3, 3], "observation_rssi": -43.45, "observation_bearing_deg": 354.5, "inspected_clue": null, "agent_mode": "CONVERGING", "agent_reasoning": "Navigating toward high-likelihood target (15, 4) (peak 76.3%, entropy 1.12). Next waypoint: (3, 3).", "target_coord": [15, 4], "belief_entropy": 1.116, "belief_peak_coord": [15, 4], "belief_peak_prob": 0.763, "inferred_status": "DORMANT_REBOOT_REQUIRED", "status_message": "Moved to (3, 3)."}, {"step_number": 11, "time_tick": 11, "action": "MOVE_E", "action_cost": 2, "battery_before": 67, "battery_after": 65, "position": [4, 3], "observation_rssi": -43.45, "observation_bearing_deg": 354.5, "inspected_clue": null, "agent_mode": "CONVERGING", "agent_reasoning": "Navigating toward high-likelihood target (15, 4) (peak 69.1%, entropy 1.04). Next waypoint: (4, 3).", "target_coord": [15, 4], "belief_entropy": 1.042, "belief_peak_coord": [15, 4], "belief_peak_prob": 0.6907, "inferred_status": "DORMANT_REBOOT_REQUIRED", "status_message": "Moved to (4, 3)."}, {"step_number": 12, "time_tick": 12, "action": "MOVE_E", "action_cost": 2, "battery_before": 65, "battery_after": 63, "position": [5, 3], "observation_rssi": -43.45, "observation_bearing_deg": 354.5, "inspected_clue": null, "agent_mode": "CONVERGING", "agent_reasoning": "Navigating toward high-likelihood target (15, 3) (peak 54.1%, entropy 1.06). Next waypoint: (5, 3).", "target_coord": [15, 3], "belief_entropy": 1.06, "belief_peak_coord": [15, 3], "belief_peak_prob": 0.5407, "inferred_status": "DORMANT_REBOOT_REQUIRED", "status_message": "Moved to (5, 3)."}, {"step_number": 13, "time_tick": 13, "action": "MOVE_E", "action_cost": 2, "battery_before": 63, "battery_after": 61, "position": [6, 3], "observation_rssi": -43.45, "observation_bearing_deg": 354.5, "inspected_clue": null, "agent_mode": "CONVERGING", "agent_reasoning": "Navigating toward high-likelihood target (15, 3) (peak 78.5%, entropy 0.82). Next waypoint: (6, 3).", "target_coord": [15, 3], "belief_entropy": 0.82, "belief_peak_coord": [15, 3], "belief_peak_prob": 0.7847, "inferred_status": "DORMANT_REBOOT_REQUIRED", "status_message": "Moved to (6, 3)."}, {"step_number": 14, "time_tick": 14, "action": "MOVE_E", "action_cost": 2, "battery_before": 61, "battery_after": 59, "position": [7, 3], "observation_rssi": -43.45, "observation_bearing_deg": 354.5, "inspected_clue": null, "agent_mode": "CONVERGING", "agent_reasoning": "Navigating toward high-likelihood target (15, 3) (peak 90.9%, entropy 0.52). Next waypoint: (7, 3).", "target_coord": [15, 3], "belief_entropy": 0.517, "belief_peak_coord": [15, 3], "belief_peak_prob": 0.9093, "inferred_status": "DORMANT_REBOOT_REQUIRED", "status_message": "Moved to (7, 3)."}, {"step_number": 15, "time_tick": 15, "action": "INSPECT", "action_cost": 3, "battery_before": 59, "battery_after": 56, "position": [7, 3], "observation_rssi": -43.45, "observation_bearing_deg": 354.5, "inspected_clue": {"id": "clue_eve_band", "x": 8, "y": 4, "description": "True EVE bio-frequency lock: Signal origin is restricted to upper plateau y <= 5.", "type": "sector_elimination", "payload": {"x_min": 0, "x_max": 15, "y_min": 6, "y_max": 8}}, "agent_mode": "INSPECTING_CLUE", "agent_reasoning": "Proximity radar detected physical clue or telemetry beacon signature. Deciphering clue payload.", "target_coord": [7, 3], "belief_entropy": 0.424, "belief_peak_coord": [15, 3], "belief_peak_prob": 0.9292, "inferred_status": "DORMANT_REBOOT_REQUIRED", "status_message": "Clue deciphered [clue_eve_band]: 'True EVE bio-frequency lock: Signal origin is restricted to upper plateau y <= 5.'."}, {"step_number": 16, "time_tick": 16, "action": "MOVE_E", "action_cost": 2, "battery_before": 56, "battery_after": 54, "position": [8, 3], "observation_rssi": -43.45, "observation_bearing_deg": 354.5, "inspected_clue": null, "agent_mode": "CONVERGING", "agent_reasoning": "Navigating toward high-likelihood target (15, 3) (peak 92.9%, entropy 0.42). Next waypoint: (8, 3).", "target_coord": [15, 3], "belief_entropy": 0.424, "belief_peak_coord": [15, 3], "belief_peak_prob": 0.9292, "inferred_status": "DORMANT_REBOOT_REQUIRED", "status_message": "Moved to (8, 3)."}, {"step_number": 17, "time_tick": 17, "action": "MOVE_E", "action_cost": 2, "battery_before": 54, "battery_after": 52, "position": [9, 3], "observation_rssi": -43.45, "observation_bearing_deg": 354.5, "inspected_clue": null, "agent_mode": "CONVERGING", "agent_reasoning": "Navigating toward high-likelihood target (15, 3) (peak 87.2%, entropy 0.57). Next waypoint: (9, 3).", "target_coord": [15, 3], "belief_entropy": 0.573, "belief_peak_coord": [15, 3], "belief_peak_prob": 0.8721, "inferred_status": "DORMANT_REBOOT_REQUIRED", "status_message": "Moved to (9, 3)."}, {"step_number": 18, "time_tick": 18, "action": "MOVE_E", "action_cost": 2, "battery_before": 52, "battery_after": 50, "position": [10, 3], "observation_rssi": -43.45, "observation_bearing_deg": 354.5, "inspected_clue": null, "agent_mode": "CONVERGING", "agent_reasoning": "Navigating toward high-likelihood target (15, 3) (peak 85.2%, entropy 0.61). Next waypoint: (10, 3).", "target_coord": [15, 3], "belief_entropy": 0.607, "belief_peak_coord": [15, 3], "belief_peak_prob": 0.8522, "inferred_status": "DORMANT_REBOOT_REQUIRED", "status_message": "Moved to (10, 3)."}, {"step_number": 19, "time_tick": 19, "action": "MOVE_E", "action_cost": 2, "battery_before": 50, "battery_after": 48, "position": [11, 3], "observation_rssi": -43.45, "observation_bearing_deg": 354.5, "inspected_clue": null, "agent_mode": "CONVERGING", "agent_reasoning": "Navigating toward high-likelihood target (15, 3) (peak 86.0%, entropy 0.58). Next waypoint: (11, 3).", "target_coord": [15, 3], "belief_entropy": 0.584, "belief_peak_coord": [15, 3], "belief_peak_prob": 0.86, "inferred_status": "DORMANT_REBOOT_REQUIRED", "status_message": "Moved to (11, 3)."}, {"step_number": 20, "time_tick": 20, "action": "MOVE_E", "action_cost": 2, "battery_before": 48, "battery_after": 46, "position": [12, 3], "observation_rssi": -43.45, "observation_bearing_deg": 354.5, "inspected_clue": null, "agent_mode": "CONVERGING", "agent_reasoning": "Navigating toward high-likelihood target (15, 3) (peak 91.9%, entropy 0.41). Next waypoint: (12, 3).", "target_coord": [15, 3], "belief_entropy": 0.407, "belief_peak_coord": [15, 3], "belief_peak_prob": 0.9186, "inferred_status": "DORMANT_REBOOT_REQUIRED", "status_message": "Moved to (12, 3)."}, {"step_number": 21, "time_tick": 21, "action": "MOVE_E", "action_cost": 2, "battery_before": 46, "battery_after": 44, "position": [13, 3], "observation_rssi": -43.45, "observation_bearing_deg": 354.5, "inspected_clue": null, "agent_mode": "CONVERGING", "agent_reasoning": "Navigating toward high-likelihood target (15, 3) (peak 98.7%, entropy 0.10). Next waypoint: (13, 3).", "target_coord": [15, 3], "belief_entropy": 0.099, "belief_peak_coord": [15, 3], "belief_peak_prob": 0.9872, "inferred_status": "DORMANT_REBOOT_REQUIRED", "status_message": "Moved to (13, 3). TARGET CONFIRMED: EVE located!"}];
+  const config = {"name": "Mission 04: Rogue Decoy Beacon", "description": "A malfunctioning Buy n Large probe broadcasting a decoy signal. The agent must interpret clues to isolate the true target.", "seed": 333, "map": {"width": 16, "height": 16, "walle_start": [1, 1], "eve_position": [13, 3], "eve_status": "DORMANT_REBOOT_REQUIRED", "obstacles": [[4, 4], [4, 5], [4, 6], [8, 7], [8, 8], [8, 9], [11, 4], [11, 5]], "recharge_stations": [[3, 2], [9, 4], [12, 10]], "clues": [{"id": "clue_decoy_alert", "x": 3, "y": 4, "description": "Radio spectrum analysis: Rogue BnL probe transmitting decoy ping at (4, 12). Disregard Southern sector y > 8.", "type": "sector_elimination", "payload": {"x_min": 0, "x_max": 15, "y_min": 9, "y_max": 15}}, {"id": "clue_eve_band", "x": 8, "y": 4, "description": "True EVE bio-frequency lock: Signal origin is restricted to upper plateau y <= 5.", "type": "sector_elimination", "payload": {"x_min": 0, "x_max": 15, "y_min": 6, "y_max": 8}}], "decoys": [{"id": "decoy_probe_01", "x": 4, "y": 12, "frequency": "433MHz"}]}, "resources": {"initial_battery": 90, "max_battery": 90, "max_time_ticks": 130, "move_cost": 2, "scan_cost": 4, "inspect_cost": 3, "recharge_rate": 20, "recharge_time_cost": 1, "safety_margin": 6}, "sensor": {"p0": -20.0, "eta": 2.0, "rssi_noise_std": 1.0, "bearing_noise_std_deg": 6.0, "obstacle_attenuation_db": 3.0, "scan_radius": 22.0, "los_check": true}, "metadata": {}};
+  const metrics = {"outcome": "SUCCESS_FOUND_EVE", "total_steps": 21, "time_ticks": 21, "initial_battery": 90, "final_battery": 44, "battery_consumed": 46, "recharge_events": 0, "total_distance_traveled": 17.0, "clues_found": 2, "initial_entropy": 4.422, "final_entropy": 0.099, "entropy_reduction_pct": 97.8, "best_estimate": [15, 3], "best_estimate_confidence_pct": 98.72, "credible_radius": 0.0, "inferred_status": "DORMANT_REBOOT_REQUIRED", "localization_error_euclidean": 2.0};
+  const groundTruth = {"eve_true_position": [13, 3], "eve_status": "DORMANT_REBOOT_REQUIRED", "total_clues": 2, "discovered_clues_count": 2, "obstacles_count": 8, "recharge_stations": [[12, 10], [3, 2], [9, 4]]};
+  const probHistory = [[[0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906], [0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906], [0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906], [0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906], [0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906], [0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906], [0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906], [0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906], [0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906], [0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906], [0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906], [0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906], [0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906], [0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906], [0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906], [0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906, 0.003906]], [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.8e-05, 0.000349, 0.002407, 0.007657, 0.01331, 0.014346], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2e-06, 0.000101, 0.001631, 0.009811, 0.027744, 0.043591, 0.043046], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 5e-06, 0.000264, 0.00385, 0.021395, 0.056778, 0.084654, 0.079985], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 7e-06, 0.000324, 0.004556, 0.024863, 0.06543, 0.097248, 0.091851], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 4e-06, 0.000194, 0.002784, 0.015755, 0.043226, 0.067023, 0.065922], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1e-06, 6.1e-05, 0.000931, 0.005697, 0.016971, 0.028519, 0.030259], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.1e-05, 0.000184, 0.00125, 0.004159, 0.007797, 0.009176], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1e-06, 2.3e-05, 0.000178, 0.000674, 0.001436, 0.001912], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2e-06, 1.8e-05, 7.7e-05, 0.000187, 0.000286], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1e-06, 6e-06, 1.8e-05, 3.2e-05], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1e-06, 3e-06], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]], [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.5e-05, 0.000182, 0.000636, 0.000838], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.1e-05, 0.000459, 0.00413, 0.01128, 0.012005], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1e-06, 0.000122, 0.004081, 0.030624, 0.071742, 0.066937], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2e-06, 0.000341, 0.010342, 0.072224, 0.16005, 0.142829], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1e-06, 0.000247, 0.007616, 0.054985, 0.126716, 0.117718], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 5e-05, 0.001745, 0.014262, 0.03716, 0.038781], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3e-06, 0.000138, 0.001372, 0.004323, 0.005398], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 4e-06, 5.4e-05, 0.000218, 0.000341], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1e-06, 5e-06, 1.1e-05], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]], [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 4e-06, 7e-06], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3e-06, 0.000101, 0.000557, 0.000725], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1e-06, 0.000197, 0.004712, 0.019187, 0.019296], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.1e-05, 0.002039, 0.040264, 0.140193, 0.123544], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.9e-05, 0.003274, 0.062733, 0.215552, 0.1892], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 5e-06, 0.000872, 0.01875, 0.072616, 0.071576], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 4.4e-05, 0.001192, 0.005822, 0.007151], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.9e-05, 0.000125, 0.000207], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1e-06, 2e-06], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]], [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 4e-06, 8e-06], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2e-06, 0.000153, 0.001252, 0.00154], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.00013, 0.008187, 0.049552, 0.047065], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1e-06, 0.000853, 0.046219, 0.249523, 0.216279], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.000495, 0.028272, 0.163245, 0.152033], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.9e-05, 0.002071, 0.015035, 0.017442], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2.1e-05, 0.000222, 0.000363], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1e-06, 2e-06], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]], [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1e-06, 3.5e-05, 8.7e-05], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1e-06, 0.000455, 0.008753, 0.014451], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.2e-05, 0.010461, 0.1597, 0.217493], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 4.4e-05, 0.013954, 0.213821, 0.296905], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3e-06, 0.001188, 0.022694, 0.03913], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 8e-06, 0.000221, 0.000561], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1e-06], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]], [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1e-06, 3.5e-05, 8.7e-05], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1e-06, 0.000455, 0.008753, 0.014451], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.2e-05, 0.010461, 0.1597, 0.217493], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 4.4e-05, 0.013954, 0.213821, 0.296905], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3e-06, 0.001188, 0.022694, 0.03913], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 8e-06, 0.000221, 0.000561], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1e-06], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]], [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1e-06, 3.5e-05, 8.7e-05], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1e-06, 0.000455, 0.008753, 0.014451], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.2e-05, 0.010461, 0.1597, 0.217493], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 4.4e-05, 0.013954, 0.213821, 0.296905], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3e-06, 0.001188, 0.022694, 0.03913], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 8e-06, 0.000221, 0.000561], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1e-06], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]], [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.3e-05, 9.1e-05], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 5.4e-05, 0.005437, 0.025111], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.001314, 0.10496, 0.397397], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.001057, 0.088468, 0.353635], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.1e-05, 0.003518, 0.018837], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 8e-06, 6.9e-05], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]], [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1e-05, 0.000209], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 9e-06, 0.004746, 0.06094], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.000132, 0.05768, 0.628677], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3.7e-05, 0.018215, 0.226112], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.000165, 0.003065], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2e-06], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]], [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 4e-06, 0.000382], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.001749, 0.11749], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2e-06, 0.012818, 0.763025], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.00139, 0.102821], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3e-06, 0.000317], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]], [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 3e-06, 0.001465], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.000774, 0.28387], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.001947, 0.690728], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 4.2e-05, 0.021162], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 9e-06], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]], [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1e-06, 0.004627], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.000119, 0.540711], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 9.3e-05, 0.451675], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.002773], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]], [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1e-06], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.011768], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 5e-06, 0.784675], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1e-06, 0.203332], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.000218], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]], [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 2e-06], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.025715], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.9093], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.064973], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1e-05], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]], [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 4e-06], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.054848], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.929174], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.015973], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]], [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 4e-06], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.054848], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.929174], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.015973], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]], [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1e-05], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.124794], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.872107], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.003089], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]], [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1e-06], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.14762], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.852172], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.000207], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]], [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.140038], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.859956], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 6e-06], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]], [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.081423], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.918577], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]], [[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.012765], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.987235], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]]];
+  const reportMarkdown = "# \ud83e\udd16 WALL-E Mission Report: Locating EVE's Signal\n\n**Mission**: Mission 04: Rogue Decoy Beacon  \n**Status**: \u2705 **MISSION SUCCESS** (`SUCCESS_FOUND_EVE`)  \n**Simulation Ticks**: 21 | **Execution Steps**: 21  \n\n---\n\n## \ud83d\udcca Executive Summary & Key Metrics\n\n| Metric | Result | Description |\n| :--- | :--- | :--- |\n| **Inferred EVE Coordinates** | `(15, 3)` | Peak posterior coordinate from Bayesian spatial map |\n| **Peak Posterior Confidence** | **98.72%** | Posterior certainty at candidate coordinate |\n| **Credible Radius (90%)** | `0.0 tiles` | Radius encompassing 90% of probability distribution |\n| **Inferred Operational State** | `DORMANT_REBOOT_REQUIRED` | Diagnosed from gathered telemetry clues |\n| **Entropy Reduction** | **97.8%** | Information gain: `4.42` $\\to$ `0.10` bits |\n| **Battery Consumed** | `46%` (Final: `44%`) | Total energy expenditure across mission |\n| **Solar Recharge Events** | `0` | Strategic recharging stops at solar stations |\n| **Distance Traveled** | `17.0 units` | Total path distance across terrain |\n| **Clues Discovered** | `2` | Environmental and telemetry clue signatures |\n\n\n### Ground Truth Verification (Eval Mode)\n- **True EVE Location**: `(13, 3)`\n- **True EVE Status**: `DORMANT_REBOOT_REQUIRED`\n- **Localization Error**: `2.00 tiles` (Close proximity)\n\n\n---\n\n## \ud83d\udd0d Evidence Dossier\n\nThe autonomous agent gathered and interpreted the following clues through interaction:\n\n| Step | Location | Type | Deciphered Evidence |\n| :--- | :---: | :--- | :--- |\n| Step 5 | (3, 4) | `sector_elimination` | Radio spectrum analysis: Rogue BnL probe transmitting decoy ping at (4, 12). Disregard Southern sector y > 8. |\n| Step 15 | (8, 4) | `sector_elimination` | True EVE bio-frequency lock: Signal origin is restricted to upper plateau y <= 5. |\n\n---\n\n## \ud83d\ude80 WALL-E's Recommended Next Move\n\n> **Tactical Directive:**  \n> Initiate physical interface protocol at coordinates (15, 3). Connect auxiliary solar jumper cable and broadcast reboot authorization code 2105-A.\n\n---\n\n## \ud83e\udded Spatial Candidate Distribution (Top 3)\n\n1. Coordinate `(15, 3)` \u2014 Posterior Probability: **98.72%**\n2. Coordinate `(15, 2)` \u2014 Posterior Probability: **1.28%**\n3. Coordinate `(15, 4)` \u2014 Posterior Probability: **0.00%**\n\n---\n*Report generated autonomously by WALL-E Mission Assessment Subsystem.*";
+
+  // State
+  let currentStepIdx = 0;
+  let isPlaying = false;
+  let playInterval = null;
+  let showHeatmap = true;
+  let playbackSpeed = 1; // 1x, 2x, 5x
+  const speeds = [1, 2, 5];
+
+  // DOM Elements
+  const canvas = document.getElementById("gridCanvas");
+  const ctx = canvas.getContext("2d");
+  const slider = document.getElementById("stepSlider");
+  const stepText = document.getElementById("currentStepText");
+  const btnPlay = document.getElementById("btnPlay");
+  const btnPrev = document.getElementById("btnPrev");
+  const btnNext = document.getElementById("btnNext");
+  const btnReset = document.getElementById("btnReset");
+  const btnHeatmap = document.getElementById("btnHeatmap");
+  const btnSpeed = document.getElementById("btnSpeed");
+
+  // Grid dimensions
+  const mapW = config.map.width;
+  const mapH = config.map.height;
+  const cellSize = Math.floor(Math.min(canvas.width / mapW, canvas.height / mapH));
+  canvas.width = cellSize * mapW;
+  canvas.height = cellSize * mapH;
+
+  function init() {
+    document.getElementById("reportMarkdownText").innerText = reportMarkdown;
+    renderCluesDossier();
+    updateUI(0);
+  }
+
+  function updateUI(stepIdx) {
+    currentStepIdx = Math.max(0, Math.min(stepIdx, traces.length - 1));
+    slider.value = currentStepIdx;
+    stepText.innerText = currentStepIdx;
+
+    if (traces.length === 0) return;
+    const t = traces[currentStepIdx];
+
+    // Update Telemetry
+    document.getElementById("valMode").innerText = t.agent_mode;
+    document.getElementById("valAction").innerText = t.action + (t.action_cost ? " (-" + t.action_cost + ")" : "");
+    document.getElementById("valPos").innerText = "(" + t.position[0] + ", " + t.position[1] + ")";
+    document.getElementById("valPeak").innerText = "(" + t.belief_peak_coord[0] + ", " + t.belief_peak_coord[1] + ")";
+    document.getElementById("valEntropy").innerText = t.belief_entropy.toFixed(2) + " bits";
+    document.getElementById("valConfidence").innerText = (t.belief_peak_prob * 100).toFixed(1) + "%";
+    document.getElementById("valStatus").innerText = t.inferred_status;
+    document.getElementById("valReasoning").innerText = t.agent_reasoning;
+
+    // Battery
+    const batPct = Math.max(0, Math.min(100, t.battery_after));
+    document.getElementById("valBatteryText").innerText = batPct + "%";
+    const fillEl = document.getElementById("batteryFill");
+    fillEl.style.width = batPct + "%";
+    if (batPct < 20) fillEl.style.background = "var(--accent-red)";
+    else if (batPct < 50) fillEl.style.background = "var(--accent-yellow)";
+    else fillEl.style.background = "var(--accent-green)";
+
+    drawMap(t);
+  }
+
+  function drawMap(currentTrace) {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // 1. Draw Grid Background
+    for (let y = 0; y < mapH; y++) {
+      for (let x = 0; x < mapW; x++) {
+        ctx.strokeStyle = "#172033";
+        ctx.strokeRect(x * cellSize, y * cellSize, cellSize, cellSize);
+      }
+    }
+
+    // 2. Obstacles
+    config.map.obstacles.forEach(([ox, oy]) => {
+      ctx.fillStyle = "#27344e";
+      ctx.fillRect(ox * cellSize + 2, oy * cellSize + 2, cellSize - 4, cellSize - 4);
+      // Scrap texture lines
+      ctx.strokeStyle = "#1b2438";
+      ctx.beginPath();
+      ctx.moveTo(ox * cellSize + 4, oy * cellSize + cellSize - 4);
+      ctx.lineTo(ox * cellSize + cellSize - 4, oy * cellSize + 4);
+      ctx.stroke();
+    });
+
+    // 3. Recharge Stations
+    config.map.recharge_stations.forEach(([rx, ry]) => {
+      ctx.fillStyle = "rgba(0, 255, 136, 0.2)";
+      ctx.fillRect(rx * cellSize, ry * cellSize, cellSize, cellSize);
+      ctx.fillStyle = "#00ff88";
+      ctx.font = `${Math.floor(cellSize * 0.6)}px sans-serif`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("⚡", (rx + 0.5) * cellSize, (ry + 0.5) * cellSize);
+    });
+
+    // 4. Clue Markers
+    config.map.clues.forEach(clue => {
+      ctx.fillStyle = "rgba(168, 85, 247, 0.25)";
+      ctx.fillRect(clue.x * cellSize, clue.y * cellSize, cellSize, cellSize);
+      ctx.fillStyle = "#a855f7";
+      ctx.font = `bold ${Math.floor(cellSize * 0.5)}px sans-serif`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("?", (clue.x + 0.5) * cellSize, (clue.y + 0.5) * cellSize);
+    });
+
+    // 5. Probability Heatmap Overlay
+    if (showHeatmap && probHistory.length > currentStepIdx) {
+      const pGrid = probHistory[currentStepIdx];
+      let maxP = 0;
+      for (let y = 0; y < mapH; y++) {
+        for (let x = 0; x < mapW; x++) {
+          if (pGrid[y][x] > maxP) maxP = pGrid[y][x];
+        }
+      }
+      if (maxP > 0) {
+        for (let y = 0; y < mapH; y++) {
+          for (let x = 0; x < mapW; x++) {
+            const p = pGrid[y][x];
+            if (p > 0.005) {
+              const alpha = Math.min(0.65, (p / maxP) * 0.7);
+              ctx.fillStyle = `rgba(255, 51, 102, ${alpha})`;
+              ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+            }
+          }
+        }
+      }
+    }
+
+    // 6. Visited Path Breadcrumbs
+    ctx.strokeStyle = "rgba(0, 240, 255, 0.5)";
+    ctx.lineWidth = 2;
+    ctx.beginPath();
+    for (let i = 0; i <= currentStepIdx; i++) {
+      const p = traces[i].position;
+      const px = (p[0] + 0.5) * cellSize;
+      const py = (p[1] + 0.5) * cellSize;
+      if (i === 0) ctx.moveTo(px, py);
+      else ctx.lineTo(px, py);
+    }
+    ctx.stroke();
+
+    // 7. WALL-E Avatar
+    const wx = (currentTrace.position[0] + 0.5) * cellSize;
+    const wy = (currentTrace.position[1] + 0.5) * cellSize;
+
+    // Outer glow
+    ctx.beginPath();
+    ctx.arc(wx, wy, cellSize * 0.45, 0, Math.PI * 2);
+    ctx.fillStyle = "rgba(255, 208, 0, 0.3)";
+    ctx.fill();
+
+    ctx.font = `${Math.floor(cellSize * 0.7)}px sans-serif`;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillText("🤖", wx, wy);
+
+    // If EVE is discovered or at final step
+    if (currentTrace.status_message && currentTrace.status_message.includes("EVE located")) {
+      const ex = (config.map.eve_position[0] + 0.5) * cellSize;
+      const ey = (config.map.eve_position[1] + 0.5) * cellSize;
+      ctx.font = `${Math.floor(cellSize * 0.8)}px sans-serif`;
+      ctx.fillText("🤍", ex, ey);
+    }
+  }
+
+  function renderCluesDossier() {
+    const container = document.getElementById("cluesList");
+    container.innerHTML = "";
+
+    const discovered = traces.filter(t => t.inspected_clue !== null);
+    if (discovered.length === 0) {
+      container.innerHTML = "<p style='color: var(--text-muted); font-size: 13px;'>No clues have been deciphered yet.</p>";
+      return;
+    }
+
+    discovered.forEach(t => {
+      const c = t.inspected_clue;
+      const item = document.createElement("div");
+      item.className = "clue-item";
+      item.innerHTML = `
+        <div><span class="clue-badge">${c.type.toUpperCase()}</span> <span style="font-size: 11px; color: var(--text-muted);">Step ${t.step_number}</span></div>
+        <div style="font-weight: 500; font-size: 13px; margin: 4px 0;">${c.description}</div>
+        <div style="font-size: 11px; color: var(--text-muted);">Coordinates: (${c.x}, ${c.y})</div>
+      `;
+      container.appendChild(item);
+    });
+  }
+
+  // Event Listeners
+  slider.addEventListener("input", e => updateUI(parseInt(e.target.value)));
+  btnPrev.addEventListener("click", () => updateUI(currentStepIdx - 1));
+  btnNext.addEventListener("click", () => updateUI(currentStepIdx + 1));
+  btnReset.addEventListener("click", () => { stopPlaying(); updateUI(0); });
+
+  btnPlay.addEventListener("click", () => {
+    if (isPlaying) stopPlaying();
+    else startPlaying();
+  });
+
+  function startPlaying() {
+    isPlaying = true;
+    btnPlay.innerText = "⏸ Pause";
+    const delay = Math.max(50, 400 / playbackSpeed);
+    playInterval = setInterval(() => {
+      if (currentStepIdx >= traces.length - 1) {
+        stopPlaying();
+      } else {
+        updateUI(currentStepIdx + 1);
+      }
+    }, delay);
+  }
+
+  function stopPlaying() {
+    isPlaying = false;
+    btnPlay.innerText = "▶ Play";
+    if (playInterval) clearInterval(playInterval);
+  }
+
+  btnSpeed.addEventListener("click", () => {
+    const curIdx = speeds.indexOf(playbackSpeed);
+    playbackSpeed = speeds[(curIdx + 1) % speeds.length];
+    btnSpeed.innerText = playbackSpeed + "x";
+    if (isPlaying) {
+      stopPlaying();
+      startPlaying();
+    }
+  });
+
+  btnHeatmap.addEventListener("click", () => {
+    showHeatmap = !showHeatmap;
+    btnHeatmap.classList.toggle("active", showHeatmap);
+    btnHeatmap.innerText = "Heatmap: " + (showHeatmap ? "ON" : "OFF");
+    updateUI(currentStepIdx);
+  });
+
+  window.switchTab = function(tabName) {
+    document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".tab-content").forEach(c => c.classList.remove("active"));
+    event.currentTarget.classList.add("active");
+    document.getElementById("tab-" + tabName).classList.add("active");
+  };
+
+  init();
+</script>
+</body>
+</html>

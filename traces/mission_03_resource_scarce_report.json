@@ -1,0 +1,73 @@
+{
+  "mission_name": "Mission 03: Dust Storm & Scarce Battery",
+  "metrics": {
+    "outcome": "SUCCESS_FOUND_EVE",
+    "total_steps": 43,
+    "time_ticks": 43,
+    "initial_battery": 35,
+    "final_battery": 28,
+    "battery_consumed": 82,
+    "recharge_events": 3,
+    "total_distance_traveled": 37.0,
+    "clues_found": 1,
+    "initial_entropy": 6.208,
+    "final_entropy": 0.856,
+    "entropy_reduction_pct": 86.2,
+    "best_estimate": [
+      14,
+      14
+    ],
+    "best_estimate_confidence_pct": 71.95,
+    "credible_radius": 1.41,
+    "inferred_status": "DORMANT_REBOOT_REQUIRED",
+    "localization_error_euclidean": 0.0
+  },
+  "recommended_next_step": "Initiate physical interface protocol at coordinates (14, 14). Connect auxiliary solar jumper cable and broadcast reboot authorization code 2105-A.",
+  "top_candidates": [
+    {
+      "coord": [
+        14,
+        14
+      ],
+      "prob": 0.7195
+    },
+    {
+      "coord": [
+        15,
+        13
+      ],
+      "prob": 0.2805
+    },
+    {
+      "coord": [
+        15,
+        12
+      ],
+      "prob": 0.0
+    }
+  ],
+  "ground_truth": {
+    "eve_true_position": [
+      14,
+      14
+    ],
+    "eve_status": "LOW_POWER_BEACON",
+    "total_clues": 2,
+    "discovered_clues_count": 1,
+    "obstacles_count": 7,
+    "recharge_stations": [
+      [
+        4,
+        4
+      ],
+      [
+        13,
+        11
+      ],
+      [
+        9,
+        8
+      ]
+    ]
+  }
+}
