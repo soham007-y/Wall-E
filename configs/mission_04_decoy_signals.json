@@ -1,0 +1,72 @@
+{
+  "name": "Mission 04: Rogue Decoy Beacon",
+  "description": "A malfunctioning Buy n Large probe broadcasting a decoy signal. The agent must interpret clues to isolate the true target.",
+  "seed": 333,
+  "map": {
+    "width": 16,
+    "height": 16,
+    "walle_start": [1, 1],
+    "eve_position": [13, 3],
+    "eve_status": "DORMANT_REBOOT_REQUIRED",
+    "obstacles": [
+      [4, 4], [4, 5], [4, 6],
+      [8, 7], [8, 8], [8, 9],
+      [11, 4], [11, 5]
+    ],
+    "recharge_stations": [
+      [3, 2],
+      [9, 4],
+      [12, 10]
+    ],
+    "clues": [
+      {
+        "id": "clue_decoy_alert",
+        "x": 3,
+        "y": 4,
+        "description": "Radio spectrum analysis: Rogue BnL probe transmitting decoy ping at (4, 12). Disregard Southern sector y > 8.",
+        "type": "sector_elimination",
+        "payload": {
+          "x_min": 0, "x_max": 15, "y_min": 9, "y_max": 15
+        }
+      },
+      {
+        "id": "clue_eve_band",
+        "x": 8,
+        "y": 4,
+        "description": "True EVE bio-frequency lock: Signal origin is restricted to upper plateau y <= 5.",
+        "type": "sector_elimination",
+        "payload": {
+          "x_min": 0, "x_max": 15, "y_min": 6, "y_max": 8
+        }
+      }
+    ],
+    "decoys": [
+      {
+        "id": "decoy_probe_01",
+        "x": 4,
+        "y": 12,
+        "frequency": "433MHz"
+      }
+    ]
+  },
+  "resources": {
+    "initial_battery": 90,
+    "max_battery": 90,
+    "max_time_ticks": 130,
+    "move_cost": 2,
+    "scan_cost": 4,
+    "inspect_cost": 3,
+    "recharge_rate": 20,
+    "recharge_time_cost": 1,
+    "safety_margin": 6
+  },
+  "sensor": {
+    "p0": -20.0,
+    "eta": 2.0,
+    "rssi_noise_std": 1.0,
+    "bearing_noise_std_deg": 6.0,
+    "obstacle_attenuation_db": 3.0,
+    "scan_radius": 22.0,
+    "los_check": true
+  }
+}

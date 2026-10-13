@@ -1,0 +1,77 @@
+{
+  "name": "Mission 02: Scrap Debris Canyon",
+  "description": "Dense scrap heaps and narrow canyon passages causing RF signal attenuation and path obstacles.",
+  "seed": 108,
+  "map": {
+    "width": 16,
+    "height": 16,
+    "walle_start": [1, 1],
+    "eve_position": [14, 13],
+    "eve_status": "DAMAGED_THRUSTER",
+    "obstacles": [
+      [3, 0], [3, 1], [3, 2], [3, 3], [3, 4],
+      [7, 6], [7, 7], [7, 8], [7, 9], [7, 10], [7, 11],
+      [11, 2], [11, 3], [11, 4], [11, 5],
+      [4, 10], [5, 10], [6, 10],
+      [12, 11], [13, 11], [14, 11]
+    ],
+    "recharge_stations": [
+      [2, 2],
+      [8, 5],
+      [13, 3]
+    ],
+    "clues": [
+      {
+        "id": "clue_sector_canyon",
+        "x": 2,
+        "y": 4,
+        "description": "Scrap pile barrier detected: No signals penetrating Northwest quadrant x < 5, y < 8.",
+        "type": "sector_elimination",
+        "payload": {
+          "x_min": 0, "x_max": 4, "y_min": 0, "y_max": 7
+        }
+      },
+      {
+        "id": "clue_dist_bound",
+        "x": 8,
+        "y": 6,
+        "description": "Short-range radar reflector reading: Target distance is between 6 and 11 tiles from this waypoint.",
+        "type": "distance_bound",
+        "payload": {
+          "min_dist": 6.0,
+          "max_dist": 11.0
+        }
+      },
+      {
+        "id": "clue_status_thruster",
+        "x": 10,
+        "y": 8,
+        "description": "Debris analysis: Scorched plasma valve fragment discovered. EVE thruster damaged.",
+        "type": "status_telemetry",
+        "payload": {
+          "status": "DAMAGED_THRUSTER"
+        }
+      }
+    ]
+  },
+  "resources": {
+    "initial_battery": 100,
+    "max_battery": 100,
+    "max_time_ticks": 140,
+    "move_cost": 2,
+    "scan_cost": 4,
+    "inspect_cost": 3,
+    "recharge_rate": 20,
+    "recharge_time_cost": 1,
+    "safety_margin": 8
+  },
+  "sensor": {
+    "p0": -20.0,
+    "eta": 2.2,
+    "rssi_noise_std": 1.5,
+    "bearing_noise_std_deg": 8.0,
+    "obstacle_attenuation_db": 5.0,
+    "scan_radius": 22.0,
+    "los_check": true
+  }
+}

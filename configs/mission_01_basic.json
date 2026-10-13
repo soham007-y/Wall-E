@@ -1,0 +1,63 @@
+{
+  "name": "Mission 01: Initial Signal Beacon",
+  "description": "Baseline exploration across open terrain with direct beacon triangulation and telemetry clues.",
+  "seed": 42,
+  "map": {
+    "width": 12,
+    "height": 12,
+    "walle_start": [1, 1],
+    "eve_position": [10, 10],
+    "eve_status": "DORMANT_REBOOT_REQUIRED",
+    "obstacles": [
+      [3, 1], [3, 2],
+      [6, 4], [6, 5],
+      [8, 8], [9, 8]
+    ],
+    "recharge_stations": [
+      [3, 3],
+      [8, 2]
+    ],
+    "clues": [
+      {
+        "id": "clue_heading_01",
+        "x": 2,
+        "y": 2,
+        "description": "Ion thruster burn marks indicate heading toward South-East quadrant (bearing 100° to 160°).",
+        "type": "heading",
+        "payload": {
+          "bearing_range": [100, 160]
+        }
+      },
+      {
+        "id": "clue_status_02",
+        "x": 6,
+        "y": 7,
+        "description": "Axiom probe log deciphered: EVE entered low-power hibernation; reboot handshake beacon active.",
+        "type": "status_telemetry",
+        "payload": {
+          "status": "DORMANT_REBOOT_REQUIRED"
+        }
+      }
+    ]
+  },
+  "resources": {
+    "initial_battery": 100,
+    "max_battery": 100,
+    "max_time_ticks": 100,
+    "move_cost": 2,
+    "scan_cost": 4,
+    "inspect_cost": 3,
+    "recharge_rate": 15,
+    "recharge_time_cost": 1,
+    "safety_margin": 6
+  },
+  "sensor": {
+    "p0": -20.0,
+    "eta": 2.0,
+    "rssi_noise_std": 1.0,
+    "bearing_noise_std_deg": 6.0,
+    "obstacle_attenuation_db": 3.0,
+    "scan_radius": 20.0,
+    "los_check": true
+  }
+}

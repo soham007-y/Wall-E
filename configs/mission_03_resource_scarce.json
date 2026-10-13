@@ -1,0 +1,61 @@
+{
+  "name": "Mission 03: Dust Storm & Scarce Battery",
+  "description": "Severely restricted initial battery requiring strategic refueling at solar waypoints to prevent stranding.",
+  "seed": 204,
+  "map": {
+    "width": 16,
+    "height": 16,
+    "walle_start": [1, 1],
+    "eve_position": [14, 14],
+    "eve_status": "LOW_POWER_BEACON",
+    "obstacles": [
+      [5, 5], [5, 6], [6, 5], [6, 6],
+      [10, 10], [10, 11], [11, 10]
+    ],
+    "recharge_stations": [
+      [4, 4],
+      [9, 8],
+      [13, 11]
+    ],
+    "clues": [
+      {
+        "id": "clue_battery_reserve",
+        "x": 3,
+        "y": 3,
+        "description": "Environmental sensor: Severe atmospheric dust storm reducing solar intake. Frequent pit stops advised.",
+        "type": "general",
+        "payload": {}
+      },
+      {
+        "id": "clue_low_power_beacon",
+        "x": 8,
+        "y": 7,
+        "description": "Telemetry frequency analysis: Pulse interval 8.0s indicates EVE is in LOW_POWER_BEACON mode.",
+        "type": "status_telemetry",
+        "payload": {
+          "status": "LOW_POWER_BEACON"
+        }
+      }
+    ]
+  },
+  "resources": {
+    "initial_battery": 35,
+    "max_battery": 80,
+    "max_time_ticks": 120,
+    "move_cost": 2,
+    "scan_cost": 4,
+    "inspect_cost": 2,
+    "recharge_rate": 25,
+    "recharge_time_cost": 1,
+    "safety_margin": 6
+  },
+  "sensor": {
+    "p0": -20.0,
+    "eta": 2.0,
+    "rssi_noise_std": 1.2,
+    "bearing_noise_std_deg": 6.0,
+    "obstacle_attenuation_db": 3.0,
+    "scan_radius": 22.0,
+    "los_check": true
+  }
+}
