@@ -2,7 +2,7 @@
 
 **Mission**: Mission 01: Initial Signal Beacon  
 **Status**: ✅ **MISSION SUCCESS** (`SUCCESS_FOUND_EVE`)  
-**Simulation Ticks**: 67 | **Execution Steps**: 67  
+**Simulation Ticks**: 21 | **Execution Steps**: 21  
 
 ---
 
@@ -15,9 +15,9 @@
 | **Credible Radius (90%)** | `0.0 tiles` | Radius encompassing 90% of probability distribution |
 | **Inferred Operational State** | `DORMANT_REBOOT_REQUIRED` | Diagnosed from gathered telemetry clues |
 | **Entropy Reduction** | **100.0%** | Information gain: `2.05` $\to$ `0.00` bits |
-| **Battery Consumed** | `123%` (Final: `67%`) | Total energy expenditure across mission |
-| **Solar Recharge Events** | `6` | Strategic recharging stops at solar stations |
-| **Distance Traveled** | `60.0 units` | Total path distance across terrain |
+| **Battery Consumed** | `43%` (Final: `57%`) | Total energy expenditure across mission |
+| **Solar Recharge Events** | `0` | Strategic recharging stops at solar stations |
+| **Distance Traveled** | `20.0 units` | Total path distance across terrain |
 | **Clues Discovered** | `1` | Environmental and telemetry clue signatures |
 
 
@@ -49,8 +49,8 @@ The autonomous agent gathered and interpreted the following clues through intera
 ## 🧭 Spatial Candidate Distribution (Top 3)
 
 1. Coordinate `(10, 10)` — Posterior Probability: **100.00%**
-2. Coordinate `(10, 9)` — Posterior Probability: **0.00%**
-3. Coordinate `(9, 9)` — Posterior Probability: **0.00%**
+2. Coordinate `(0, 0)` — Posterior Probability: **0.00%**
+3. Coordinate `(0, 1)` — Posterior Probability: **0.00%**
 
 ---
 *Report generated autonomously by WALL-E Mission Assessment Subsystem.*

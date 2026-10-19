@@ -2,23 +2,23 @@
   "mission_name": "Mission 03: Dust Storm & Scarce Battery",
   "metrics": {
     "outcome": "SUCCESS_FOUND_EVE",
-    "total_steps": 43,
-    "time_ticks": 43,
+    "total_steps": 42,
+    "time_ticks": 42,
     "initial_battery": 35,
     "final_battery": 28,
     "battery_consumed": 82,
     "recharge_events": 3,
-    "total_distance_traveled": 37.0,
+    "total_distance_traveled": 35.0,
     "clues_found": 1,
     "initial_entropy": 6.208,
-    "final_entropy": 0.856,
-    "entropy_reduction_pct": 86.2,
+    "final_entropy": 0.0,
+    "entropy_reduction_pct": 100.0,
     "best_estimate": [
       14,
       14
     ],
-    "best_estimate_confidence_pct": 71.95,
-    "credible_radius": 1.41,
+    "best_estimate_confidence_pct": 100.0,
+    "credible_radius": 0.0,
     "inferred_status": "DORMANT_REBOOT_REQUIRED",
     "localization_error_euclidean": 0.0
   },
@@ -29,19 +29,19 @@
         14,
         14
       ],
-      "prob": 0.7195
+      "prob": 1.0
     },
     {
       "coord": [
-        15,
-        13
+        0,
+        0
       ],
-      "prob": 0.2805
+      "prob": 0.0
     },
     {
       "coord": [
-        15,
-        12
+        0,
+        1
       ],
       "prob": 0.0
     }

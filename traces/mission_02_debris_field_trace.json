@@ -1,6 +1,6 @@
 {
   "mission_name": "Mission 02: Scrap Debris Canyon",
-  "total_steps": 33,
+  "total_steps": 64,
   "steps": [
     {
       "step_number": 1,
@@ -46,17 +46,17 @@
       "observation_bearing_deg": 53.5,
       "inspected_clue": null,
       "agent_mode": "EXPLORING",
-      "agent_reasoning": "Navigating toward high-likelihood target (8, 11) (peak 2.8%, entropy 5.96). Next waypoint: (1, 3).",
+      "agent_reasoning": "Navigating toward high-likelihood target (4, 5) (peak 1.8%, entropy 6.52). Next waypoint: (1, 3).",
       "target_coord": [
-        8,
-        11
+        4,
+        5
       ],
-      "belief_entropy": 5.963,
+      "belief_entropy": 6.517,
       "belief_peak_coord": [
-        11,
-        15
+        4,
+        5
       ],
-      "belief_peak_prob": 0.0276,
+      "belief_peak_prob": 0.0176,
       "inferred_status": "DORMANT_REBOOT_REQUIRED",
       "status_message": "Moved to (1, 3)."
     },
@@ -92,12 +92,12 @@
         1,
         3
       ],
-      "belief_entropy": 5.519,
+      "belief_entropy": 6.517,
       "belief_peak_coord": [
-        10,
-        14
+        4,
+        5
       ],
-      "belief_peak_prob": 0.0399,
+      "belief_peak_prob": 0.0176,
       "inferred_status": "DORMANT_REBOOT_REQUIRED",
       "status_message": "Clue deciphered [clue_sector_canyon]: 'Scrap pile barrier detected: No signals penetrating Northwest quadrant x < 5, y < 8.'."
     },
@@ -116,17 +116,17 @@
       "observation_bearing_deg": 53.5,
       "inspected_clue": null,
       "agent_mode": "EXPLORING",
-      "agent_reasoning": "Navigating toward high-likelihood target (9, 13) (peak 4.2%, entropy 5.40). Next waypoint: (1, 4).",
+      "agent_reasoning": "Navigating toward high-likelihood target (7, 9) (peak 2.0%, entropy 6.34). Next waypoint: (1, 4).",
       "target_coord": [
-        9,
-        13
+        7,
+        9
       ],
-      "belief_entropy": 5.397,
+      "belief_entropy": 6.34,
       "belief_peak_coord": [
-        10,
-        14
+        7,
+        9
       ],
-      "belief_peak_prob": 0.0421,
+      "belief_peak_prob": 0.0197,
       "inferred_status": "DORMANT_REBOOT_REQUIRED",
       "status_message": "Moved to (1, 4)."
     },
@@ -145,17 +145,17 @@
       "observation_bearing_deg": 53.5,
       "inspected_clue": null,
       "agent_mode": "EXPLORING",
-      "agent_reasoning": "Navigating toward high-likelihood target (9, 13) (peak 6.0%, entropy 5.03). Next waypoint: (1, 5).",
+      "agent_reasoning": "Navigating toward high-likelihood target (7, 9) (peak 2.0%, entropy 6.34). Next waypoint: (1, 5).",
       "target_coord": [
-        9,
-        13
+        7,
+        9
       ],
-      "belief_entropy": 5.034,
+      "belief_entropy": 6.34,
       "belief_peak_coord": [
-        10,
-        15
+        7,
+        9
       ],
-      "belief_peak_prob": 0.0598,
+      "belief_peak_prob": 0.0197,
       "inferred_status": "DORMANT_REBOOT_REQUIRED",
       "status_message": "Moved to (1, 5)."
     },
@@ -174,17 +174,17 @@
       "observation_bearing_deg": 26.2,
       "inspected_clue": null,
       "agent_mode": "TRIANGULATING",
-      "agent_reasoning": "Belief entropy is 4.66 bits. Dispatched directional radar ping to triangulate EVE's signal from current position (1, 5).",
+      "agent_reasoning": "Belief entropy is 6.34 bits. Dispatched directional radar ping to triangulate EVE's signal from current position (1, 5).",
       "target_coord": [
         1,
         5
       ],
-      "belief_entropy": 4.658,
+      "belief_entropy": 6.34,
       "belief_peak_coord": [
-        10,
-        15
+        7,
+        9
       ],
-      "belief_peak_prob": 0.0854,
+      "belief_peak_prob": 0.0197,
       "inferred_status": "DORMANT_REBOOT_REQUIRED",
       "status_message": "Deep radar ping: RSSI -50.0 dBm, bearing 26.2\u00b0."
     },
@@ -203,17 +203,17 @@
       "observation_bearing_deg": 26.2,
       "inspected_clue": null,
       "agent_mode": "EXPLORING",
-      "agent_reasoning": "Navigating toward high-likelihood target (9, 14) (peak 8.5%, entropy 4.66). Next waypoint: (1, 6).",
+      "agent_reasoning": "Navigating toward high-likelihood target (15, 15) (peak 24.5%, entropy 3.48). Next waypoint: (1, 6).",
       "target_coord": [
-        9,
-        14
-      ],
-      "belief_entropy": 4.658,
-      "belief_peak_coord": [
-        10,
+        15,
         15
       ],
-      "belief_peak_prob": 0.0854,
+      "belief_entropy": 3.484,
+      "belief_peak_coord": [
+        15,
+        15
+      ],
+      "belief_peak_prob": 0.2452,
       "inferred_status": "DORMANT_REBOOT_REQUIRED",
       "status_message": "Moved to (1, 6)."
     },
@@ -232,17 +232,17 @@
       "observation_bearing_deg": 26.2,
       "inspected_clue": null,
       "agent_mode": "EXPLORING",
-      "agent_reasoning": "Navigating toward high-likelihood target (12, 15) (peak 25.8%, entropy 2.90). Next waypoint: (1, 7).",
+      "agent_reasoning": "Navigating toward high-likelihood target (15, 15) (peak 24.5%, entropy 3.48). Next waypoint: (1, 7).",
       "target_coord": [
-        12,
+        15,
         15
       ],
-      "belief_entropy": 2.904,
+      "belief_entropy": 3.484,
       "belief_peak_coord": [
-        13,
+        15,
         15
       ],
-      "belief_peak_prob": 0.2578,
+      "belief_peak_prob": 0.2452,
       "inferred_status": "DORMANT_REBOOT_REQUIRED",
       "status_message": "Moved to (1, 7)."
     },
@@ -260,18 +260,18 @@
       "observation_rssi": -49.96,
       "observation_bearing_deg": 26.2,
       "inspected_clue": null,
-      "agent_mode": "CONVERGING",
-      "agent_reasoning": "Navigating toward high-likelihood target (14, 15) (peak 36.3%, entropy 2.04). Next waypoint: (1, 8).",
+      "agent_mode": "EXPLORING",
+      "agent_reasoning": "Navigating toward high-likelihood target (15, 15) (peak 24.5%, entropy 3.48). Next waypoint: (1, 8).",
       "target_coord": [
-        14,
+        15,
         15
       ],
-      "belief_entropy": 2.039,
+      "belief_entropy": 3.484,
       "belief_peak_coord": [
-        14,
+        15,
         15
       ],
-      "belief_peak_prob": 0.3628,
+      "belief_peak_prob": 0.2452,
       "inferred_status": "DORMANT_REBOOT_REQUIRED",
       "status_message": "Moved to (1, 8)."
     },
@@ -289,682 +289,1591 @@
       "observation_rssi": -49.96,
       "observation_bearing_deg": 26.2,
       "inspected_clue": null,
-      "agent_mode": "CONVERGING",
-      "agent_reasoning": "Navigating toward high-likelihood target (15, 15) (peak 68.6%, entropy 1.22). Next waypoint: (1, 9).",
+      "agent_mode": "EXPLORING",
+      "agent_reasoning": "Navigating toward high-likelihood target (15, 15) (peak 24.5%, entropy 3.48). Next waypoint: (1, 9).",
       "target_coord": [
         15,
         15
       ],
-      "belief_entropy": 1.219,
+      "belief_entropy": 3.484,
       "belief_peak_coord": [
         15,
         15
       ],
-      "belief_peak_prob": 0.6863,
+      "belief_peak_prob": 0.2452,
       "inferred_status": "DORMANT_REBOOT_REQUIRED",
       "status_message": "Moved to (1, 9)."
     },
     {
       "step_number": 11,
       "time_tick": 11,
-      "action": "MOVE_S",
-      "action_cost": 2,
+      "action": "SCAN",
+      "action_cost": 4,
       "battery_before": 77,
-      "battery_after": 75,
+      "battery_after": 73,
       "position": [
         1,
-        10
+        9
       ],
-      "observation_rssi": -49.96,
-      "observation_bearing_deg": 26.2,
+      "observation_rssi": -60.1,
+      "observation_bearing_deg": 22.3,
       "inspected_clue": null,
-      "agent_mode": "CONVERGING",
-      "agent_reasoning": "Navigating toward high-likelihood target (15, 15) (peak 87.3%, entropy 0.64). Next waypoint: (1, 10).",
+      "agent_mode": "TRIANGULATING",
+      "agent_reasoning": "Belief entropy is 3.48 bits. Dispatched directional radar ping to triangulate EVE's signal from current position (1, 9).",
       "target_coord": [
-        15,
-        15
+        1,
+        9
       ],
-      "belief_entropy": 0.636,
+      "belief_entropy": 3.484,
       "belief_peak_coord": [
         15,
         15
       ],
-      "belief_peak_prob": 0.8733,
+      "belief_peak_prob": 0.2452,
       "inferred_status": "DORMANT_REBOOT_REQUIRED",
-      "status_message": "Moved to (1, 10)."
+      "status_message": "Deep radar ping: RSSI -60.1 dBm, bearing 22.3\u00b0."
     },
     {
       "step_number": 12,
       "time_tick": 12,
       "action": "MOVE_S",
       "action_cost": 2,
-      "battery_before": 75,
-      "battery_after": 73,
+      "battery_before": 73,
+      "battery_after": 71,
       "position": [
         1,
-        11
+        10
       ],
-      "observation_rssi": -49.96,
-      "observation_bearing_deg": 26.2,
+      "observation_rssi": -60.1,
+      "observation_bearing_deg": 22.3,
       "inspected_clue": null,
-      "agent_mode": "CONVERGING",
-      "agent_reasoning": "Navigating toward high-likelihood target (15, 15) (peak 95.5%, entropy 0.29). Next waypoint: (1, 11).",
+      "agent_mode": "EXPLORING",
+      "agent_reasoning": "Navigating toward high-likelihood target (15, 15) (peak 27.8%, entropy 3.23). Next waypoint: (1, 10).",
       "target_coord": [
         15,
         15
       ],
-      "belief_entropy": 0.29,
+      "belief_entropy": 3.23,
       "belief_peak_coord": [
         15,
         15
       ],
-      "belief_peak_prob": 0.9551,
+      "belief_peak_prob": 0.2781,
       "inferred_status": "DORMANT_REBOOT_REQUIRED",
-      "status_message": "Moved to (1, 11)."
+      "status_message": "Moved to (1, 10)."
     },
     {
       "step_number": 13,
       "time_tick": 13,
       "action": "MOVE_S",
       "action_cost": 2,
-      "battery_before": 73,
-      "battery_after": 71,
+      "battery_before": 71,
+      "battery_after": 69,
       "position": [
         1,
-        12
+        11
       ],
-      "observation_rssi": -49.96,
-      "observation_bearing_deg": 26.2,
+      "observation_rssi": -60.1,
+      "observation_bearing_deg": 22.3,
       "inspected_clue": null,
-      "agent_mode": "CONVERGING",
-      "agent_reasoning": "Navigating toward high-likelihood target (15, 15) (peak 98.6%, entropy 0.12). Next waypoint: (1, 12).",
+      "agent_mode": "EXPLORING",
+      "agent_reasoning": "Navigating toward high-likelihood target (15, 15) (peak 27.8%, entropy 3.23). Next waypoint: (1, 11).",
       "target_coord": [
         15,
         15
       ],
-      "belief_entropy": 0.115,
+      "belief_entropy": 3.23,
       "belief_peak_coord": [
         15,
         15
       ],
-      "belief_peak_prob": 0.9857,
+      "belief_peak_prob": 0.2781,
       "inferred_status": "DORMANT_REBOOT_REQUIRED",
-      "status_message": "Moved to (1, 12)."
+      "status_message": "Moved to (1, 11)."
     },
     {
       "step_number": 14,
       "time_tick": 14,
       "action": "MOVE_S",
       "action_cost": 2,
-      "battery_before": 71,
-      "battery_after": 69,
+      "battery_before": 69,
+      "battery_after": 67,
       "position": [
         1,
-        13
+        12
       ],
-      "observation_rssi": -49.96,
-      "observation_bearing_deg": 26.2,
+      "observation_rssi": -60.1,
+      "observation_bearing_deg": 22.3,
       "inspected_clue": null,
-      "agent_mode": "CONVERGING",
-      "agent_reasoning": "Navigating toward high-likelihood target (15, 15) (peak 99.6%, entropy 0.04). Next waypoint: (1, 13).",
+      "agent_mode": "EXPLORING",
+      "agent_reasoning": "Navigating toward high-likelihood target (15, 15) (peak 27.8%, entropy 3.23). Next waypoint: (1, 12).",
       "target_coord": [
         15,
         15
       ],
-      "belief_entropy": 0.04,
+      "belief_entropy": 3.23,
       "belief_peak_coord": [
         15,
         15
       ],
-      "belief_peak_prob": 0.9959,
+      "belief_peak_prob": 0.2781,
       "inferred_status": "DORMANT_REBOOT_REQUIRED",
-      "status_message": "Moved to (1, 13)."
+      "status_message": "Moved to (1, 12)."
     },
     {
       "step_number": 15,
       "time_tick": 15,
       "action": "MOVE_S",
       "action_cost": 2,
-      "battery_before": 69,
-      "battery_after": 67,
-      "position": [
-        1,
-        14
-      ],
-      "observation_rssi": -49.96,
-      "observation_bearing_deg": 26.2,
-      "inspected_clue": null,
-      "agent_mode": "CONVERGING",
-      "agent_reasoning": "Navigating toward high-likelihood target (15, 15) (peak 99.9%, entropy 0.01). Next waypoint: (1, 14).",
-      "target_coord": [
-        15,
-        15
-      ],
-      "belief_entropy": 0.012,
-      "belief_peak_coord": [
-        15,
-        15
-      ],
-      "belief_peak_prob": 0.999,
-      "inferred_status": "DORMANT_REBOOT_REQUIRED",
-      "status_message": "Moved to (1, 14)."
-    },
-    {
-      "step_number": 16,
-      "time_tick": 16,
-      "action": "MOVE_S",
-      "action_cost": 2,
       "battery_before": 67,
       "battery_after": 65,
       "position": [
         1,
-        15
+        13
       ],
-      "observation_rssi": -49.96,
-      "observation_bearing_deg": 26.2,
+      "observation_rssi": -60.1,
+      "observation_bearing_deg": 22.3,
       "inspected_clue": null,
-      "agent_mode": "CONVERGING",
-      "agent_reasoning": "Navigating toward high-likelihood target (15, 15) (peak 100.0%, entropy 0.00). Next waypoint: (1, 15).",
+      "agent_mode": "EXPLORING",
+      "agent_reasoning": "Navigating toward high-likelihood target (15, 15) (peak 27.8%, entropy 3.23). Next waypoint: (1, 13).",
       "target_coord": [
         15,
         15
       ],
-      "belief_entropy": 0.003,
+      "belief_entropy": 3.23,
       "belief_peak_coord": [
         15,
         15
       ],
-      "belief_peak_prob": 0.9998,
+      "belief_peak_prob": 0.2781,
       "inferred_status": "DORMANT_REBOOT_REQUIRED",
-      "status_message": "Moved to (1, 15)."
+      "status_message": "Moved to (1, 13)."
+    },
+    {
+      "step_number": 16,
+      "time_tick": 16,
+      "action": "SCAN",
+      "action_cost": 4,
+      "battery_before": 65,
+      "battery_after": 61,
+      "position": [
+        1,
+        13
+      ],
+      "observation_rssi": -43.6,
+      "observation_bearing_deg": 2.7,
+      "inspected_clue": null,
+      "agent_mode": "TRIANGULATING",
+      "agent_reasoning": "Belief entropy is 3.23 bits. Dispatched directional radar ping to triangulate EVE's signal from current position (1, 13).",
+      "target_coord": [
+        1,
+        13
+      ],
+      "belief_entropy": 3.23,
+      "belief_peak_coord": [
+        15,
+        15
+      ],
+      "belief_peak_prob": 0.2781,
+      "inferred_status": "DORMANT_REBOOT_REQUIRED",
+      "status_message": "Deep radar ping: RSSI -43.6 dBm, bearing 2.7\u00b0."
     },
     {
       "step_number": 17,
       "time_tick": 17,
-      "action": "MOVE_E",
+      "action": "MOVE_S",
       "action_cost": 2,
-      "battery_before": 65,
-      "battery_after": 63,
+      "battery_before": 61,
+      "battery_after": 59,
       "position": [
-        2,
-        15
+        1,
+        14
       ],
-      "observation_rssi": -49.96,
-      "observation_bearing_deg": 26.2,
+      "observation_rssi": -43.6,
+      "observation_bearing_deg": 2.7,
       "inspected_clue": null,
-      "agent_mode": "CONVERGING",
-      "agent_reasoning": "Navigating toward high-likelihood target (15, 15) (peak 100.0%, entropy 0.00). Next waypoint: (2, 15).",
+      "agent_mode": "EXPLORING",
+      "agent_reasoning": "Navigating toward high-likelihood target (15, 15) (peak 19.7%, entropy 3.37). Next waypoint: (1, 14).",
       "target_coord": [
         15,
         15
       ],
-      "belief_entropy": 0.001,
+      "belief_entropy": 3.372,
       "belief_peak_coord": [
         15,
         15
       ],
-      "belief_peak_prob": 1.0,
+      "belief_peak_prob": 0.1972,
       "inferred_status": "DORMANT_REBOOT_REQUIRED",
-      "status_message": "Moved to (2, 15)."
+      "status_message": "Moved to (1, 14)."
     },
     {
       "step_number": 18,
       "time_tick": 18,
-      "action": "MOVE_E",
+      "action": "MOVE_S",
       "action_cost": 2,
-      "battery_before": 63,
-      "battery_after": 61,
+      "battery_before": 59,
+      "battery_after": 57,
       "position": [
-        3,
+        1,
         15
       ],
-      "observation_rssi": -49.96,
-      "observation_bearing_deg": 26.2,
+      "observation_rssi": -43.6,
+      "observation_bearing_deg": 2.7,
       "inspected_clue": null,
-      "agent_mode": "CONVERGING",
-      "agent_reasoning": "Navigating toward high-likelihood target (15, 15) (peak 100.0%, entropy 0.00). Next waypoint: (3, 15).",
+      "agent_mode": "EXPLORING",
+      "agent_reasoning": "Navigating toward high-likelihood target (15, 15) (peak 19.7%, entropy 3.37). Next waypoint: (1, 15).",
       "target_coord": [
         15,
         15
       ],
-      "belief_entropy": 0.0,
+      "belief_entropy": 3.372,
       "belief_peak_coord": [
         15,
         15
       ],
-      "belief_peak_prob": 1.0,
+      "belief_peak_prob": 0.1972,
       "inferred_status": "DORMANT_REBOOT_REQUIRED",
-      "status_message": "Moved to (3, 15)."
+      "status_message": "Moved to (1, 15)."
     },
     {
       "step_number": 19,
       "time_tick": 19,
       "action": "MOVE_E",
       "action_cost": 2,
-      "battery_before": 61,
-      "battery_after": 59,
+      "battery_before": 57,
+      "battery_after": 55,
       "position": [
-        4,
+        2,
         15
       ],
-      "observation_rssi": -49.96,
-      "observation_bearing_deg": 26.2,
+      "observation_rssi": -43.6,
+      "observation_bearing_deg": 2.7,
       "inspected_clue": null,
-      "agent_mode": "CONVERGING",
-      "agent_reasoning": "Navigating toward high-likelihood target (15, 15) (peak 100.0%, entropy 0.00). Next waypoint: (4, 15).",
+      "agent_mode": "EXPLORING",
+      "agent_reasoning": "Navigating toward high-likelihood target (15, 15) (peak 19.7%, entropy 3.37). Next waypoint: (2, 15).",
       "target_coord": [
         15,
         15
       ],
-      "belief_entropy": 0.0,
+      "belief_entropy": 3.372,
       "belief_peak_coord": [
         15,
         15
       ],
-      "belief_peak_prob": 1.0,
+      "belief_peak_prob": 0.1972,
       "inferred_status": "DORMANT_REBOOT_REQUIRED",
-      "status_message": "Moved to (4, 15)."
+      "status_message": "Moved to (2, 15)."
     },
     {
       "step_number": 20,
       "time_tick": 20,
       "action": "MOVE_E",
       "action_cost": 2,
-      "battery_before": 59,
-      "battery_after": 57,
+      "battery_before": 55,
+      "battery_after": 53,
       "position": [
-        5,
+        3,
         15
       ],
-      "observation_rssi": -49.96,
-      "observation_bearing_deg": 26.2,
+      "observation_rssi": -43.6,
+      "observation_bearing_deg": 2.7,
       "inspected_clue": null,
-      "agent_mode": "CONVERGING",
-      "agent_reasoning": "Navigating toward high-likelihood target (15, 15) (peak 100.0%, entropy 0.00). Next waypoint: (5, 15).",
+      "agent_mode": "EXPLORING",
+      "agent_reasoning": "Navigating toward high-likelihood target (15, 15) (peak 19.7%, entropy 3.37). Next waypoint: (3, 15).",
       "target_coord": [
         15,
         15
       ],
-      "belief_entropy": 0.0,
+      "belief_entropy": 3.372,
       "belief_peak_coord": [
         15,
         15
       ],
-      "belief_peak_prob": 1.0,
+      "belief_peak_prob": 0.1972,
       "inferred_status": "DORMANT_REBOOT_REQUIRED",
-      "status_message": "Moved to (5, 15)."
+      "status_message": "Moved to (3, 15)."
     },
     {
       "step_number": 21,
       "time_tick": 21,
-      "action": "MOVE_E",
-      "action_cost": 2,
-      "battery_before": 57,
-      "battery_after": 55,
+      "action": "SCAN",
+      "action_cost": 4,
+      "battery_before": 53,
+      "battery_after": 49,
       "position": [
-        6,
+        3,
         15
       ],
-      "observation_rssi": -49.96,
-      "observation_bearing_deg": 26.2,
+      "observation_rssi": -42.19,
+      "observation_bearing_deg": 4.7,
       "inspected_clue": null,
-      "agent_mode": "CONVERGING",
-      "agent_reasoning": "Navigating toward high-likelihood target (15, 15) (peak 100.0%, entropy 0.00). Next waypoint: (6, 15).",
+      "agent_mode": "TRIANGULATING",
+      "agent_reasoning": "Belief entropy is 3.37 bits. Dispatched directional radar ping to triangulate EVE's signal from current position (3, 15).",
       "target_coord": [
-        15,
+        3,
         15
       ],
-      "belief_entropy": 0.0,
+      "belief_entropy": 3.372,
       "belief_peak_coord": [
         15,
         15
       ],
-      "belief_peak_prob": 1.0,
+      "belief_peak_prob": 0.1972,
       "inferred_status": "DORMANT_REBOOT_REQUIRED",
-      "status_message": "Moved to (6, 15)."
+      "status_message": "Deep radar ping: RSSI -42.2 dBm, bearing 4.7\u00b0."
     },
     {
       "step_number": 22,
       "time_tick": 22,
       "action": "MOVE_E",
       "action_cost": 2,
-      "battery_before": 55,
-      "battery_after": 53,
+      "battery_before": 49,
+      "battery_after": 47,
       "position": [
-        7,
+        4,
         15
       ],
-      "observation_rssi": -49.96,
-      "observation_bearing_deg": 26.2,
+      "observation_rssi": -42.19,
+      "observation_bearing_deg": 4.7,
       "inspected_clue": null,
-      "agent_mode": "CONVERGING",
-      "agent_reasoning": "Navigating toward high-likelihood target (15, 15) (peak 100.0%, entropy 0.00). Next waypoint: (7, 15).",
+      "agent_mode": "EXPLORING",
+      "agent_reasoning": "Navigating toward high-likelihood target (14, 15) (peak 24.8%, entropy 2.88). Next waypoint: (4, 15).",
       "target_coord": [
-        15,
+        14,
         15
       ],
-      "belief_entropy": 0.0,
+      "belief_entropy": 2.885,
       "belief_peak_coord": [
-        15,
+        14,
         15
       ],
-      "belief_peak_prob": 1.0,
+      "belief_peak_prob": 0.2484,
       "inferred_status": "DORMANT_REBOOT_REQUIRED",
-      "status_message": "Moved to (7, 15)."
+      "status_message": "Moved to (4, 15)."
     },
     {
       "step_number": 23,
       "time_tick": 23,
       "action": "MOVE_E",
       "action_cost": 2,
-      "battery_before": 53,
-      "battery_after": 51,
+      "battery_before": 47,
+      "battery_after": 45,
       "position": [
-        8,
+        5,
         15
       ],
-      "observation_rssi": -49.96,
-      "observation_bearing_deg": 26.2,
+      "observation_rssi": -42.19,
+      "observation_bearing_deg": 4.7,
       "inspected_clue": null,
-      "agent_mode": "CONVERGING",
-      "agent_reasoning": "Navigating toward high-likelihood target (15, 15) (peak 100.0%, entropy 0.00). Next waypoint: (8, 15).",
+      "agent_mode": "EXPLORING",
+      "agent_reasoning": "Navigating toward high-likelihood target (14, 15) (peak 24.8%, entropy 2.88). Next waypoint: (5, 15).",
       "target_coord": [
-        15,
+        14,
         15
       ],
-      "belief_entropy": 0.0,
+      "belief_entropy": 2.885,
       "belief_peak_coord": [
-        15,
+        14,
         15
       ],
-      "belief_peak_prob": 1.0,
+      "belief_peak_prob": 0.2484,
       "inferred_status": "DORMANT_REBOOT_REQUIRED",
-      "status_message": "Moved to (8, 15)."
+      "status_message": "Moved to (5, 15)."
     },
     {
       "step_number": 24,
       "time_tick": 24,
       "action": "MOVE_E",
       "action_cost": 2,
-      "battery_before": 51,
-      "battery_after": 49,
+      "battery_before": 45,
+      "battery_after": 43,
       "position": [
-        9,
+        6,
         15
       ],
-      "observation_rssi": -49.96,
-      "observation_bearing_deg": 26.2,
+      "observation_rssi": -42.19,
+      "observation_bearing_deg": 4.7,
       "inspected_clue": null,
-      "agent_mode": "CONVERGING",
-      "agent_reasoning": "Navigating toward high-likelihood target (15, 15) (peak 100.0%, entropy 0.00). Next waypoint: (9, 15).",
+      "agent_mode": "EXPLORING",
+      "agent_reasoning": "Navigating toward high-likelihood target (14, 15) (peak 24.8%, entropy 2.88). Next waypoint: (6, 15).",
       "target_coord": [
-        15,
+        14,
         15
       ],
-      "belief_entropy": 0.0,
+      "belief_entropy": 2.885,
       "belief_peak_coord": [
-        15,
+        14,
         15
       ],
-      "belief_peak_prob": 1.0,
+      "belief_peak_prob": 0.2484,
       "inferred_status": "DORMANT_REBOOT_REQUIRED",
-      "status_message": "Moved to (9, 15)."
+      "status_message": "Moved to (6, 15)."
     },
     {
       "step_number": 25,
       "time_tick": 25,
       "action": "MOVE_E",
       "action_cost": 2,
-      "battery_before": 49,
-      "battery_after": 47,
+      "battery_before": 43,
+      "battery_after": 41,
       "position": [
-        10,
+        7,
         15
       ],
-      "observation_rssi": -49.96,
-      "observation_bearing_deg": 26.2,
+      "observation_rssi": -42.19,
+      "observation_bearing_deg": 4.7,
       "inspected_clue": null,
-      "agent_mode": "CONVERGING",
-      "agent_reasoning": "Navigating toward high-likelihood target (15, 15) (peak 100.0%, entropy 0.00). Next waypoint: (10, 15).",
+      "agent_mode": "EXPLORING",
+      "agent_reasoning": "Navigating toward high-likelihood target (14, 15) (peak 24.8%, entropy 2.88). Next waypoint: (7, 15).",
       "target_coord": [
-        15,
+        14,
         15
       ],
-      "belief_entropy": 0.0,
+      "belief_entropy": 2.885,
       "belief_peak_coord": [
-        15,
+        14,
         15
       ],
-      "belief_peak_prob": 1.0,
+      "belief_peak_prob": 0.2484,
       "inferred_status": "DORMANT_REBOOT_REQUIRED",
-      "status_message": "Moved to (10, 15)."
+      "status_message": "Moved to (7, 15)."
     },
     {
       "step_number": 26,
       "time_tick": 26,
-      "action": "MOVE_E",
-      "action_cost": 2,
-      "battery_before": 47,
-      "battery_after": 45,
+      "action": "SCAN",
+      "action_cost": 4,
+      "battery_before": 41,
+      "battery_after": 37,
       "position": [
-        11,
+        7,
         15
       ],
-      "observation_rssi": -49.96,
-      "observation_bearing_deg": 26.2,
+      "observation_rssi": -38.61,
+      "observation_bearing_deg": 348.9,
       "inspected_clue": null,
-      "agent_mode": "CONVERGING",
-      "agent_reasoning": "Navigating toward high-likelihood target (15, 15) (peak 100.0%, entropy 0.00). Next waypoint: (11, 15).",
+      "agent_mode": "TRIANGULATING",
+      "agent_reasoning": "Belief entropy is 2.88 bits. Dispatched directional radar ping to triangulate EVE's signal from current position (7, 15).",
       "target_coord": [
-        15,
+        7,
         15
       ],
-      "belief_entropy": 0.0,
+      "belief_entropy": 2.885,
       "belief_peak_coord": [
-        15,
+        14,
         15
       ],
-      "belief_peak_prob": 1.0,
+      "belief_peak_prob": 0.2484,
       "inferred_status": "DORMANT_REBOOT_REQUIRED",
-      "status_message": "Moved to (11, 15)."
+      "status_message": "Deep radar ping: RSSI -38.6 dBm, bearing 348.9\u00b0."
     },
     {
       "step_number": 27,
       "time_tick": 27,
-      "action": "MOVE_E",
+      "action": "MOVE_N",
       "action_cost": 2,
-      "battery_before": 45,
-      "battery_after": 43,
+      "battery_before": 37,
+      "battery_after": 35,
       "position": [
-        12,
-        15
+        7,
+        14
       ],
-      "observation_rssi": -49.96,
-      "observation_bearing_deg": 26.2,
+      "observation_rssi": -38.61,
+      "observation_bearing_deg": 348.9,
       "inspected_clue": null,
-      "agent_mode": "CONVERGING",
-      "agent_reasoning": "Navigating toward high-likelihood target (15, 15) (peak 100.0%, entropy 0.00). Next waypoint: (12, 15).",
+      "agent_mode": "EXPLORING",
+      "agent_reasoning": "Navigating toward high-likelihood target (14, 14) (peak 27.6%, entropy 2.78). Next waypoint: (7, 14).",
       "target_coord": [
-        15,
-        15
+        14,
+        14
       ],
-      "belief_entropy": 0.0,
+      "belief_entropy": 2.782,
       "belief_peak_coord": [
-        15,
-        15
+        14,
+        14
       ],
-      "belief_peak_prob": 1.0,
+      "belief_peak_prob": 0.2757,
       "inferred_status": "DORMANT_REBOOT_REQUIRED",
-      "status_message": "Moved to (12, 15)."
+      "status_message": "Moved to (7, 14)."
     },
     {
       "step_number": 28,
       "time_tick": 28,
       "action": "MOVE_E",
       "action_cost": 2,
-      "battery_before": 43,
-      "battery_after": 41,
+      "battery_before": 35,
+      "battery_after": 33,
       "position": [
-        13,
-        15
+        8,
+        14
       ],
-      "observation_rssi": -49.96,
-      "observation_bearing_deg": 26.2,
+      "observation_rssi": -38.61,
+      "observation_bearing_deg": 348.9,
       "inspected_clue": null,
-      "agent_mode": "CONVERGING",
-      "agent_reasoning": "Navigating toward high-likelihood target (15, 15) (peak 100.0%, entropy 0.00). Next waypoint: (13, 15).",
+      "agent_mode": "EXPLORING",
+      "agent_reasoning": "Navigating toward high-likelihood target (14, 14) (peak 27.6%, entropy 2.78). Next waypoint: (8, 14).",
       "target_coord": [
-        15,
-        15
+        14,
+        14
       ],
-      "belief_entropy": 0.0,
+      "belief_entropy": 2.782,
       "belief_peak_coord": [
-        15,
-        15
+        14,
+        14
       ],
-      "belief_peak_prob": 1.0,
+      "belief_peak_prob": 0.2757,
       "inferred_status": "DORMANT_REBOOT_REQUIRED",
-      "status_message": "Moved to (13, 15)."
+      "status_message": "Moved to (8, 14)."
     },
     {
       "step_number": 29,
       "time_tick": 29,
       "action": "MOVE_E",
       "action_cost": 2,
-      "battery_before": 41,
-      "battery_after": 39,
+      "battery_before": 33,
+      "battery_after": 31,
       "position": [
-        14,
-        15
+        9,
+        14
       ],
-      "observation_rssi": -49.96,
-      "observation_bearing_deg": 26.2,
+      "observation_rssi": -38.61,
+      "observation_bearing_deg": 348.9,
       "inspected_clue": null,
-      "agent_mode": "CONVERGING",
-      "agent_reasoning": "Navigating toward high-likelihood target (15, 15) (peak 100.0%, entropy 0.00). Next waypoint: (14, 15).",
+      "agent_mode": "EXPLORING",
+      "agent_reasoning": "Navigating toward high-likelihood target (14, 14) (peak 27.6%, entropy 2.78). Next waypoint: (9, 14).",
       "target_coord": [
-        15,
-        15
+        14,
+        14
       ],
-      "belief_entropy": 0.0,
+      "belief_entropy": 2.782,
       "belief_peak_coord": [
-        15,
-        15
+        14,
+        14
       ],
-      "belief_peak_prob": 1.0,
+      "belief_peak_prob": 0.2757,
       "inferred_status": "DORMANT_REBOOT_REQUIRED",
-      "status_message": "Moved to (14, 15)."
+      "status_message": "Moved to (9, 14)."
     },
     {
       "step_number": 30,
       "time_tick": 30,
       "action": "MOVE_E",
       "action_cost": 2,
-      "battery_before": 39,
-      "battery_after": 37,
+      "battery_before": 31,
+      "battery_after": 29,
       "position": [
-        15,
-        15
+        10,
+        14
       ],
-      "observation_rssi": -49.96,
-      "observation_bearing_deg": 26.2,
+      "observation_rssi": -38.61,
+      "observation_bearing_deg": 348.9,
       "inspected_clue": null,
-      "agent_mode": "CONVERGING",
-      "agent_reasoning": "Navigating toward high-likelihood target (15, 15) (peak 100.0%, entropy 0.00). Next waypoint: (15, 15).",
+      "agent_mode": "EXPLORING",
+      "agent_reasoning": "Navigating toward high-likelihood target (14, 14) (peak 27.6%, entropy 2.78). Next waypoint: (10, 14).",
       "target_coord": [
-        15,
-        15
+        14,
+        14
       ],
-      "belief_entropy": 0.0,
+      "belief_entropy": 2.782,
       "belief_peak_coord": [
-        15,
-        15
+        14,
+        14
       ],
-      "belief_peak_prob": 1.0,
+      "belief_peak_prob": 0.2757,
       "inferred_status": "DORMANT_REBOOT_REQUIRED",
-      "status_message": "Moved to (15, 15)."
+      "status_message": "Moved to (10, 14)."
     },
     {
       "step_number": 31,
       "time_tick": 31,
       "action": "MOVE_N",
       "action_cost": 2,
-      "battery_before": 37,
-      "battery_after": 35,
+      "battery_before": 29,
+      "battery_after": 27,
       "position": [
-        15,
-        14
+        10,
+        13
       ],
-      "observation_rssi": -49.96,
-      "observation_bearing_deg": 26.2,
+      "observation_rssi": -38.61,
+      "observation_bearing_deg": 348.9,
       "inspected_clue": null,
-      "agent_mode": "CONVERGING",
-      "agent_reasoning": "Navigating toward high-likelihood target (15, 14) (peak 100.0%, entropy 0.00). Next waypoint: (15, 14).",
+      "agent_mode": "RETREAT_TO_RECHARGE",
+      "agent_reasoning": "BATTERY CRITICAL: Battery at 29%, return cost to station at (8, 5) is 22. Safety threshold breached. Executing retreat protocol to recharge.",
       "target_coord": [
-        15,
-        14
+        8,
+        5
       ],
-      "belief_entropy": 0.0,
+      "belief_entropy": 2.782,
       "belief_peak_coord": [
-        15,
+        14,
         14
       ],
-      "belief_peak_prob": 1.0,
+      "belief_peak_prob": 0.2757,
       "inferred_status": "DORMANT_REBOOT_REQUIRED",
-      "status_message": "Moved to (15, 14)."
+      "status_message": "Moved to (10, 13)."
     },
     {
       "step_number": 32,
       "time_tick": 32,
-      "action": "MOVE_W",
+      "action": "MOVE_N",
       "action_cost": 2,
-      "battery_before": 35,
-      "battery_after": 33,
+      "battery_before": 27,
+      "battery_after": 25,
       "position": [
-        14,
-        14
+        10,
+        12
       ],
-      "observation_rssi": -49.96,
-      "observation_bearing_deg": 26.2,
+      "observation_rssi": -38.61,
+      "observation_bearing_deg": 348.9,
       "inspected_clue": null,
-      "agent_mode": "CONVERGING",
-      "agent_reasoning": "Navigating toward high-likelihood target (14, 14) (peak 100.0%, entropy 0.00). Next waypoint: (14, 14).",
+      "agent_mode": "RETREAT_TO_RECHARGE",
+      "agent_reasoning": "BATTERY CRITICAL: Battery at 27%, return cost to station at (8, 5) is 20. Safety threshold breached. Executing retreat protocol to recharge.",
       "target_coord": [
-        14,
-        14
+        8,
+        5
       ],
-      "belief_entropy": 0.0,
+      "belief_entropy": 2.782,
       "belief_peak_coord": [
         14,
         14
       ],
-      "belief_peak_prob": 1.0,
+      "belief_peak_prob": 0.2757,
       "inferred_status": "DORMANT_REBOOT_REQUIRED",
-      "status_message": "Moved to (14, 14)."
+      "status_message": "Moved to (10, 12)."
     },
     {
       "step_number": 33,
       "time_tick": 33,
       "action": "MOVE_N",
       "action_cost": 2,
-      "battery_before": 33,
-      "battery_after": 31,
+      "battery_before": 25,
+      "battery_after": 23,
       "position": [
-        14,
-        13
+        10,
+        11
       ],
-      "observation_rssi": -49.96,
-      "observation_bearing_deg": 26.2,
+      "observation_rssi": -38.61,
+      "observation_bearing_deg": 348.9,
+      "inspected_clue": null,
+      "agent_mode": "RETREAT_TO_RECHARGE",
+      "agent_reasoning": "BATTERY CRITICAL: Battery at 25%, return cost to station at (8, 5) is 18. Safety threshold breached. Executing retreat protocol to recharge.",
+      "target_coord": [
+        8,
+        5
+      ],
+      "belief_entropy": 2.782,
+      "belief_peak_coord": [
+        14,
+        14
+      ],
+      "belief_peak_prob": 0.2757,
+      "inferred_status": "DORMANT_REBOOT_REQUIRED",
+      "status_message": "Moved to (10, 11)."
+    },
+    {
+      "step_number": 34,
+      "time_tick": 34,
+      "action": "MOVE_N",
+      "action_cost": 2,
+      "battery_before": 23,
+      "battery_after": 21,
+      "position": [
+        10,
+        10
+      ],
+      "observation_rssi": -38.61,
+      "observation_bearing_deg": 348.9,
+      "inspected_clue": null,
+      "agent_mode": "RETREAT_TO_RECHARGE",
+      "agent_reasoning": "BATTERY CRITICAL: Battery at 23%, return cost to station at (8, 5) is 16. Safety threshold breached. Executing retreat protocol to recharge.",
+      "target_coord": [
+        8,
+        5
+      ],
+      "belief_entropy": 2.782,
+      "belief_peak_coord": [
+        14,
+        14
+      ],
+      "belief_peak_prob": 0.2757,
+      "inferred_status": "DORMANT_REBOOT_REQUIRED",
+      "status_message": "Moved to (10, 10)."
+    },
+    {
+      "step_number": 35,
+      "time_tick": 35,
+      "action": "MOVE_N",
+      "action_cost": 2,
+      "battery_before": 21,
+      "battery_after": 19,
+      "position": [
+        10,
+        9
+      ],
+      "observation_rssi": -38.61,
+      "observation_bearing_deg": 348.9,
+      "inspected_clue": null,
+      "agent_mode": "RETREAT_TO_RECHARGE",
+      "agent_reasoning": "BATTERY CRITICAL: Battery at 21%, return cost to station at (8, 5) is 14. Safety threshold breached. Executing retreat protocol to recharge.",
+      "target_coord": [
+        8,
+        5
+      ],
+      "belief_entropy": 2.782,
+      "belief_peak_coord": [
+        14,
+        14
+      ],
+      "belief_peak_prob": 0.2757,
+      "inferred_status": "DORMANT_REBOOT_REQUIRED",
+      "status_message": "Moved to (10, 9)."
+    },
+    {
+      "step_number": 36,
+      "time_tick": 36,
+      "action": "MOVE_N",
+      "action_cost": 2,
+      "battery_before": 19,
+      "battery_after": 17,
+      "position": [
+        10,
+        8
+      ],
+      "observation_rssi": -38.61,
+      "observation_bearing_deg": 348.9,
+      "inspected_clue": null,
+      "agent_mode": "RETREAT_TO_RECHARGE",
+      "agent_reasoning": "BATTERY CRITICAL: Battery at 19%, return cost to station at (8, 5) is 12. Safety threshold breached. Executing retreat protocol to recharge.",
+      "target_coord": [
+        8,
+        5
+      ],
+      "belief_entropy": 2.782,
+      "belief_peak_coord": [
+        14,
+        14
+      ],
+      "belief_peak_prob": 0.2757,
+      "inferred_status": "DORMANT_REBOOT_REQUIRED",
+      "status_message": "Moved to (10, 8)."
+    },
+    {
+      "step_number": 37,
+      "time_tick": 37,
+      "action": "MOVE_N",
+      "action_cost": 2,
+      "battery_before": 17,
+      "battery_after": 15,
+      "position": [
+        10,
+        7
+      ],
+      "observation_rssi": -38.61,
+      "observation_bearing_deg": 348.9,
+      "inspected_clue": null,
+      "agent_mode": "RETREAT_TO_RECHARGE",
+      "agent_reasoning": "BATTERY CRITICAL: Battery at 17%, return cost to station at (8, 5) is 10. Safety threshold breached. Executing retreat protocol to recharge.",
+      "target_coord": [
+        8,
+        5
+      ],
+      "belief_entropy": 2.782,
+      "belief_peak_coord": [
+        14,
+        14
+      ],
+      "belief_peak_prob": 0.2757,
+      "inferred_status": "DORMANT_REBOOT_REQUIRED",
+      "status_message": "Moved to (10, 7)."
+    },
+    {
+      "step_number": 38,
+      "time_tick": 38,
+      "action": "MOVE_N",
+      "action_cost": 2,
+      "battery_before": 15,
+      "battery_after": 13,
+      "position": [
+        10,
+        6
+      ],
+      "observation_rssi": -38.61,
+      "observation_bearing_deg": 348.9,
+      "inspected_clue": null,
+      "agent_mode": "RETREAT_TO_RECHARGE",
+      "agent_reasoning": "BATTERY CRITICAL: Battery at 15%, return cost to station at (8, 5) is 8. Safety threshold breached. Executing retreat protocol to recharge.",
+      "target_coord": [
+        8,
+        5
+      ],
+      "belief_entropy": 2.782,
+      "belief_peak_coord": [
+        14,
+        14
+      ],
+      "belief_peak_prob": 0.2757,
+      "inferred_status": "DORMANT_REBOOT_REQUIRED",
+      "status_message": "Moved to (10, 6)."
+    },
+    {
+      "step_number": 39,
+      "time_tick": 39,
+      "action": "MOVE_N",
+      "action_cost": 2,
+      "battery_before": 13,
+      "battery_after": 11,
+      "position": [
+        10,
+        5
+      ],
+      "observation_rssi": -38.61,
+      "observation_bearing_deg": 348.9,
+      "inspected_clue": null,
+      "agent_mode": "RETREAT_TO_RECHARGE",
+      "agent_reasoning": "BATTERY CRITICAL: Battery at 13%, return cost to station at (8, 5) is 6. Safety threshold breached. Executing retreat protocol to recharge.",
+      "target_coord": [
+        8,
+        5
+      ],
+      "belief_entropy": 2.782,
+      "belief_peak_coord": [
+        14,
+        14
+      ],
+      "belief_peak_prob": 0.2757,
+      "inferred_status": "DORMANT_REBOOT_REQUIRED",
+      "status_message": "Moved to (10, 5)."
+    },
+    {
+      "step_number": 40,
+      "time_tick": 40,
+      "action": "MOVE_W",
+      "action_cost": 2,
+      "battery_before": 11,
+      "battery_after": 9,
+      "position": [
+        9,
+        5
+      ],
+      "observation_rssi": -38.61,
+      "observation_bearing_deg": 348.9,
+      "inspected_clue": null,
+      "agent_mode": "RETREAT_TO_RECHARGE",
+      "agent_reasoning": "BATTERY CRITICAL: Battery at 11%, return cost to station at (8, 5) is 4. Safety threshold breached. Executing retreat protocol to recharge.",
+      "target_coord": [
+        8,
+        5
+      ],
+      "belief_entropy": 2.782,
+      "belief_peak_coord": [
+        14,
+        14
+      ],
+      "belief_peak_prob": 0.2757,
+      "inferred_status": "DORMANT_REBOOT_REQUIRED",
+      "status_message": "Moved to (9, 5)."
+    },
+    {
+      "step_number": 41,
+      "time_tick": 41,
+      "action": "MOVE_W",
+      "action_cost": 2,
+      "battery_before": 9,
+      "battery_after": 7,
+      "position": [
+        8,
+        5
+      ],
+      "observation_rssi": -38.61,
+      "observation_bearing_deg": 348.9,
+      "inspected_clue": null,
+      "agent_mode": "RETREAT_TO_RECHARGE",
+      "agent_reasoning": "BATTERY CRITICAL: Battery at 9%, return cost to station at (8, 5) is 2. Safety threshold breached. Executing retreat protocol to recharge.",
+      "target_coord": [
+        8,
+        5
+      ],
+      "belief_entropy": 2.782,
+      "belief_peak_coord": [
+        14,
+        14
+      ],
+      "belief_peak_prob": 0.2757,
+      "inferred_status": "DORMANT_REBOOT_REQUIRED",
+      "status_message": "Moved to (8, 5)."
+    },
+    {
+      "step_number": 42,
+      "time_tick": 42,
+      "action": "RECHARGE",
+      "action_cost": 0,
+      "battery_before": 7,
+      "battery_after": 27,
+      "position": [
+        8,
+        5
+      ],
+      "observation_rssi": -38.61,
+      "observation_bearing_deg": 348.9,
+      "inspected_clue": null,
+      "agent_mode": "RECHARGING",
+      "agent_reasoning": "Solar recharging active. Battery at 7% (7% capacity). Restoring energy reserves.",
+      "target_coord": [
+        8,
+        5
+      ],
+      "belief_entropy": 2.782,
+      "belief_peak_coord": [
+        14,
+        14
+      ],
+      "belief_peak_prob": 0.2757,
+      "inferred_status": "DORMANT_REBOOT_REQUIRED",
+      "status_message": "Solar panels deployed. Recharged from 7% to 27%."
+    },
+    {
+      "step_number": 43,
+      "time_tick": 43,
+      "action": "RECHARGE",
+      "action_cost": 0,
+      "battery_before": 27,
+      "battery_after": 47,
+      "position": [
+        8,
+        5
+      ],
+      "observation_rssi": -38.61,
+      "observation_bearing_deg": 348.9,
+      "inspected_clue": null,
+      "agent_mode": "RECHARGING",
+      "agent_reasoning": "Solar recharging active. Battery at 27% (27% capacity). Restoring energy reserves.",
+      "target_coord": [
+        8,
+        5
+      ],
+      "belief_entropy": 2.782,
+      "belief_peak_coord": [
+        14,
+        14
+      ],
+      "belief_peak_prob": 0.2757,
+      "inferred_status": "DORMANT_REBOOT_REQUIRED",
+      "status_message": "Solar panels deployed. Recharged from 27% to 47%."
+    },
+    {
+      "step_number": 44,
+      "time_tick": 44,
+      "action": "RECHARGE",
+      "action_cost": 0,
+      "battery_before": 47,
+      "battery_after": 67,
+      "position": [
+        8,
+        5
+      ],
+      "observation_rssi": -38.61,
+      "observation_bearing_deg": 348.9,
+      "inspected_clue": null,
+      "agent_mode": "RECHARGING",
+      "agent_reasoning": "Solar recharging active. Battery at 47% (47% capacity). Restoring energy reserves.",
+      "target_coord": [
+        8,
+        5
+      ],
+      "belief_entropy": 2.782,
+      "belief_peak_coord": [
+        14,
+        14
+      ],
+      "belief_peak_prob": 0.2757,
+      "inferred_status": "DORMANT_REBOOT_REQUIRED",
+      "status_message": "Solar panels deployed. Recharged from 47% to 67%."
+    },
+    {
+      "step_number": 45,
+      "time_tick": 45,
+      "action": "RECHARGE",
+      "action_cost": 0,
+      "battery_before": 67,
+      "battery_after": 87,
+      "position": [
+        8,
+        5
+      ],
+      "observation_rssi": -38.61,
+      "observation_bearing_deg": 348.9,
+      "inspected_clue": null,
+      "agent_mode": "RECHARGING",
+      "agent_reasoning": "Solar recharging active. Battery at 67% (67% capacity). Restoring energy reserves.",
+      "target_coord": [
+        8,
+        5
+      ],
+      "belief_entropy": 2.782,
+      "belief_peak_coord": [
+        14,
+        14
+      ],
+      "belief_peak_prob": 0.2757,
+      "inferred_status": "DORMANT_REBOOT_REQUIRED",
+      "status_message": "Solar panels deployed. Recharged from 67% to 87%."
+    },
+    {
+      "step_number": 46,
+      "time_tick": 46,
+      "action": "RECHARGE",
+      "action_cost": 0,
+      "battery_before": 87,
+      "battery_after": 100,
+      "position": [
+        8,
+        5
+      ],
+      "observation_rssi": -38.61,
+      "observation_bearing_deg": 348.9,
+      "inspected_clue": null,
+      "agent_mode": "RECHARGING",
+      "agent_reasoning": "Solar recharging active. Battery at 87% (87% capacity). Restoring energy reserves.",
+      "target_coord": [
+        8,
+        5
+      ],
+      "belief_entropy": 2.782,
+      "belief_peak_coord": [
+        14,
+        14
+      ],
+      "belief_peak_prob": 0.2757,
+      "inferred_status": "DORMANT_REBOOT_REQUIRED",
+      "status_message": "Solar panels deployed. Recharged from 87% to 100%."
+    },
+    {
+      "step_number": 47,
+      "time_tick": 47,
+      "action": "INSPECT",
+      "action_cost": 3,
+      "battery_before": 100,
+      "battery_after": 97,
+      "position": [
+        8,
+        5
+      ],
+      "observation_rssi": -38.61,
+      "observation_bearing_deg": 348.9,
+      "inspected_clue": {
+        "id": "clue_dist_bound",
+        "x": 8,
+        "y": 6,
+        "description": "Short-range radar reflector reading: Target distance is between 6 and 11 tiles from this waypoint.",
+        "type": "distance_bound",
+        "payload": {
+          "min_dist": 6.0,
+          "max_dist": 11.0
+        }
+      },
+      "agent_mode": "INSPECTING_CLUE",
+      "agent_reasoning": "Proximity radar detected physical clue or telemetry beacon signature. Deciphering clue payload.",
+      "target_coord": [
+        8,
+        5
+      ],
+      "belief_entropy": 2.782,
+      "belief_peak_coord": [
+        14,
+        14
+      ],
+      "belief_peak_prob": 0.2757,
+      "inferred_status": "DORMANT_REBOOT_REQUIRED",
+      "status_message": "Clue deciphered [clue_dist_bound]: 'Short-range radar reflector reading: Target distance is between 6 and 11 tiles from this waypoint.'."
+    },
+    {
+      "step_number": 48,
+      "time_tick": 48,
+      "action": "SCAN",
+      "action_cost": 4,
+      "battery_before": 97,
+      "battery_after": 93,
+      "position": [
+        8,
+        5
+      ],
+      "observation_rssi": -43.99,
+      "observation_bearing_deg": 45.3,
+      "inspected_clue": null,
+      "agent_mode": "TRIANGULATING",
+      "agent_reasoning": "Belief entropy is 2.57 bits. Dispatched directional radar ping to triangulate EVE's signal from current position (8, 5).",
+      "target_coord": [
+        8,
+        5
+      ],
+      "belief_entropy": 2.569,
+      "belief_peak_coord": [
+        14,
+        14
+      ],
+      "belief_peak_prob": 0.3191,
+      "inferred_status": "DORMANT_REBOOT_REQUIRED",
+      "status_message": "Deep radar ping: RSSI -44.0 dBm, bearing 45.3\u00b0."
+    },
+    {
+      "step_number": 49,
+      "time_tick": 49,
+      "action": "MOVE_S",
+      "action_cost": 2,
+      "battery_before": 93,
+      "battery_after": 91,
+      "position": [
+        8,
+        6
+      ],
+      "observation_rssi": -43.99,
+      "observation_bearing_deg": 45.3,
       "inspected_clue": null,
       "agent_mode": "CONVERGING",
-      "agent_reasoning": "Navigating toward high-likelihood target (15, 13) (peak 100.0%, entropy 0.00). Next waypoint: (14, 13).",
+      "agent_reasoning": "Navigating toward high-likelihood target (15, 14) (peak 37.2%, entropy 2.21). Next waypoint: (8, 6).",
       "target_coord": [
         15,
+        14
+      ],
+      "belief_entropy": 2.209,
+      "belief_peak_coord": [
+        15,
+        14
+      ],
+      "belief_peak_prob": 0.3718,
+      "inferred_status": "DORMANT_REBOOT_REQUIRED",
+      "status_message": "Moved to (8, 6)."
+    },
+    {
+      "step_number": 50,
+      "time_tick": 50,
+      "action": "MOVE_S",
+      "action_cost": 2,
+      "battery_before": 91,
+      "battery_after": 89,
+      "position": [
+        8,
+        7
+      ],
+      "observation_rssi": -43.99,
+      "observation_bearing_deg": 45.3,
+      "inspected_clue": null,
+      "agent_mode": "CONVERGING",
+      "agent_reasoning": "Navigating toward high-likelihood target (15, 14) (peak 37.2%, entropy 2.21). Next waypoint: (8, 7).",
+      "target_coord": [
+        15,
+        14
+      ],
+      "belief_entropy": 2.209,
+      "belief_peak_coord": [
+        15,
+        14
+      ],
+      "belief_peak_prob": 0.3718,
+      "inferred_status": "DORMANT_REBOOT_REQUIRED",
+      "status_message": "Moved to (8, 7)."
+    },
+    {
+      "step_number": 51,
+      "time_tick": 51,
+      "action": "MOVE_S",
+      "action_cost": 2,
+      "battery_before": 89,
+      "battery_after": 87,
+      "position": [
+        8,
+        8
+      ],
+      "observation_rssi": -43.99,
+      "observation_bearing_deg": 45.3,
+      "inspected_clue": null,
+      "agent_mode": "CONVERGING",
+      "agent_reasoning": "Navigating toward high-likelihood target (15, 14) (peak 37.2%, entropy 2.21). Next waypoint: (8, 8).",
+      "target_coord": [
+        15,
+        14
+      ],
+      "belief_entropy": 2.209,
+      "belief_peak_coord": [
+        15,
+        14
+      ],
+      "belief_peak_prob": 0.3718,
+      "inferred_status": "DORMANT_REBOOT_REQUIRED",
+      "status_message": "Moved to (8, 8)."
+    },
+    {
+      "step_number": 52,
+      "time_tick": 52,
+      "action": "MOVE_S",
+      "action_cost": 2,
+      "battery_before": 87,
+      "battery_after": 85,
+      "position": [
+        8,
+        9
+      ],
+      "observation_rssi": -43.99,
+      "observation_bearing_deg": 45.3,
+      "inspected_clue": null,
+      "agent_mode": "CONVERGING",
+      "agent_reasoning": "Navigating toward high-likelihood target (15, 14) (peak 37.2%, entropy 2.21). Next waypoint: (8, 9).",
+      "target_coord": [
+        15,
+        14
+      ],
+      "belief_entropy": 2.209,
+      "belief_peak_coord": [
+        15,
+        14
+      ],
+      "belief_peak_prob": 0.3718,
+      "inferred_status": "DORMANT_REBOOT_REQUIRED",
+      "status_message": "Moved to (8, 9)."
+    },
+    {
+      "step_number": 53,
+      "time_tick": 53,
+      "action": "MOVE_S",
+      "action_cost": 2,
+      "battery_before": 85,
+      "battery_after": 83,
+      "position": [
+        8,
+        10
+      ],
+      "observation_rssi": -43.99,
+      "observation_bearing_deg": 45.3,
+      "inspected_clue": null,
+      "agent_mode": "CONVERGING",
+      "agent_reasoning": "Navigating toward high-likelihood target (15, 14) (peak 37.2%, entropy 2.21). Next waypoint: (8, 10).",
+      "target_coord": [
+        15,
+        14
+      ],
+      "belief_entropy": 2.209,
+      "belief_peak_coord": [
+        15,
+        14
+      ],
+      "belief_peak_prob": 0.3718,
+      "inferred_status": "DORMANT_REBOOT_REQUIRED",
+      "status_message": "Moved to (8, 10)."
+    },
+    {
+      "step_number": 54,
+      "time_tick": 54,
+      "action": "MOVE_S",
+      "action_cost": 2,
+      "battery_before": 83,
+      "battery_after": 81,
+      "position": [
+        8,
+        11
+      ],
+      "observation_rssi": -43.99,
+      "observation_bearing_deg": 45.3,
+      "inspected_clue": null,
+      "agent_mode": "CONVERGING",
+      "agent_reasoning": "Navigating toward high-likelihood target (15, 14) (peak 37.2%, entropy 2.21). Next waypoint: (8, 11).",
+      "target_coord": [
+        15,
+        14
+      ],
+      "belief_entropy": 2.209,
+      "belief_peak_coord": [
+        15,
+        14
+      ],
+      "belief_peak_prob": 0.3718,
+      "inferred_status": "DORMANT_REBOOT_REQUIRED",
+      "status_message": "Moved to (8, 11)."
+    },
+    {
+      "step_number": 55,
+      "time_tick": 55,
+      "action": "MOVE_S",
+      "action_cost": 2,
+      "battery_before": 81,
+      "battery_after": 79,
+      "position": [
+        8,
+        12
+      ],
+      "observation_rssi": -43.99,
+      "observation_bearing_deg": 45.3,
+      "inspected_clue": null,
+      "agent_mode": "CONVERGING",
+      "agent_reasoning": "Navigating toward high-likelihood target (15, 14) (peak 37.2%, entropy 2.21). Next waypoint: (8, 12).",
+      "target_coord": [
+        15,
+        14
+      ],
+      "belief_entropy": 2.209,
+      "belief_peak_coord": [
+        15,
+        14
+      ],
+      "belief_peak_prob": 0.3718,
+      "inferred_status": "DORMANT_REBOOT_REQUIRED",
+      "status_message": "Moved to (8, 12)."
+    },
+    {
+      "step_number": 56,
+      "time_tick": 56,
+      "action": "MOVE_S",
+      "action_cost": 2,
+      "battery_before": 79,
+      "battery_after": 77,
+      "position": [
+        8,
+        13
+      ],
+      "observation_rssi": -43.99,
+      "observation_bearing_deg": 45.3,
+      "inspected_clue": null,
+      "agent_mode": "CONVERGING",
+      "agent_reasoning": "Navigating toward high-likelihood target (15, 14) (peak 37.2%, entropy 2.21). Next waypoint: (8, 13).",
+      "target_coord": [
+        15,
+        14
+      ],
+      "belief_entropy": 2.209,
+      "belief_peak_coord": [
+        15,
+        14
+      ],
+      "belief_peak_prob": 0.3718,
+      "inferred_status": "DORMANT_REBOOT_REQUIRED",
+      "status_message": "Moved to (8, 13)."
+    },
+    {
+      "step_number": 57,
+      "time_tick": 57,
+      "action": "MOVE_S",
+      "action_cost": 2,
+      "battery_before": 77,
+      "battery_after": 75,
+      "position": [
+        8,
+        14
+      ],
+      "observation_rssi": -43.99,
+      "observation_bearing_deg": 45.3,
+      "inspected_clue": null,
+      "agent_mode": "CONVERGING",
+      "agent_reasoning": "Navigating toward high-likelihood target (15, 14) (peak 37.2%, entropy 2.21). Next waypoint: (8, 14).",
+      "target_coord": [
+        15,
+        14
+      ],
+      "belief_entropy": 2.209,
+      "belief_peak_coord": [
+        15,
+        14
+      ],
+      "belief_peak_prob": 0.3718,
+      "inferred_status": "DORMANT_REBOOT_REQUIRED",
+      "status_message": "Moved to (8, 14)."
+    },
+    {
+      "step_number": 58,
+      "time_tick": 58,
+      "action": "MOVE_E",
+      "action_cost": 2,
+      "battery_before": 75,
+      "battery_after": 73,
+      "position": [
+        9,
+        14
+      ],
+      "observation_rssi": -43.99,
+      "observation_bearing_deg": 45.3,
+      "inspected_clue": null,
+      "agent_mode": "CONVERGING",
+      "agent_reasoning": "Navigating toward high-likelihood target (15, 14) (peak 37.2%, entropy 2.21). Next waypoint: (9, 14).",
+      "target_coord": [
+        15,
+        14
+      ],
+      "belief_entropy": 2.209,
+      "belief_peak_coord": [
+        15,
+        14
+      ],
+      "belief_peak_prob": 0.3718,
+      "inferred_status": "DORMANT_REBOOT_REQUIRED",
+      "status_message": "Moved to (9, 14)."
+    },
+    {
+      "step_number": 59,
+      "time_tick": 59,
+      "action": "MOVE_E",
+      "action_cost": 2,
+      "battery_before": 73,
+      "battery_after": 71,
+      "position": [
+        10,
+        14
+      ],
+      "observation_rssi": -43.99,
+      "observation_bearing_deg": 45.3,
+      "inspected_clue": null,
+      "agent_mode": "CONVERGING",
+      "agent_reasoning": "Navigating toward high-likelihood target (15, 14) (peak 37.2%, entropy 2.21). Next waypoint: (10, 14).",
+      "target_coord": [
+        15,
+        14
+      ],
+      "belief_entropy": 2.209,
+      "belief_peak_coord": [
+        15,
+        14
+      ],
+      "belief_peak_prob": 0.3718,
+      "inferred_status": "DORMANT_REBOOT_REQUIRED",
+      "status_message": "Moved to (10, 14)."
+    },
+    {
+      "step_number": 60,
+      "time_tick": 60,
+      "action": "MOVE_E",
+      "action_cost": 2,
+      "battery_before": 71,
+      "battery_after": 69,
+      "position": [
+        11,
+        14
+      ],
+      "observation_rssi": -43.99,
+      "observation_bearing_deg": 45.3,
+      "inspected_clue": null,
+      "agent_mode": "CONVERGING",
+      "agent_reasoning": "Navigating toward high-likelihood target (15, 14) (peak 37.2%, entropy 2.21). Next waypoint: (11, 14).",
+      "target_coord": [
+        15,
+        14
+      ],
+      "belief_entropy": 2.209,
+      "belief_peak_coord": [
+        15,
+        14
+      ],
+      "belief_peak_prob": 0.3718,
+      "inferred_status": "DORMANT_REBOOT_REQUIRED",
+      "status_message": "Moved to (11, 14)."
+    },
+    {
+      "step_number": 61,
+      "time_tick": 61,
+      "action": "MOVE_E",
+      "action_cost": 2,
+      "battery_before": 69,
+      "battery_after": 67,
+      "position": [
+        12,
+        14
+      ],
+      "observation_rssi": -43.99,
+      "observation_bearing_deg": 45.3,
+      "inspected_clue": null,
+      "agent_mode": "CONVERGING",
+      "agent_reasoning": "Navigating toward high-likelihood target (15, 14) (peak 37.2%, entropy 2.21). Next waypoint: (12, 14).",
+      "target_coord": [
+        15,
+        14
+      ],
+      "belief_entropy": 2.209,
+      "belief_peak_coord": [
+        15,
+        14
+      ],
+      "belief_peak_prob": 0.3718,
+      "inferred_status": "DORMANT_REBOOT_REQUIRED",
+      "status_message": "Moved to (12, 14)."
+    },
+    {
+      "step_number": 62,
+      "time_tick": 62,
+      "action": "MOVE_E",
+      "action_cost": 2,
+      "battery_before": 67,
+      "battery_after": 65,
+      "position": [
+        13,
+        14
+      ],
+      "observation_rssi": -43.99,
+      "observation_bearing_deg": 45.3,
+      "inspected_clue": null,
+      "agent_mode": "CONVERGING",
+      "agent_reasoning": "Navigating toward high-likelihood target (15, 14) (peak 37.2%, entropy 2.21). Next waypoint: (13, 14).",
+      "target_coord": [
+        15,
+        14
+      ],
+      "belief_entropy": 2.207,
+      "belief_peak_coord": [
+        15,
+        14
+      ],
+      "belief_peak_prob": 0.3719,
+      "inferred_status": "DORMANT_REBOOT_REQUIRED",
+      "status_message": "Moved to (13, 14)."
+    },
+    {
+      "step_number": 63,
+      "time_tick": 63,
+      "action": "MOVE_N",
+      "action_cost": 2,
+      "battery_before": 65,
+      "battery_after": 63,
+      "position": [
+        13,
+        13
+      ],
+      "observation_rssi": -43.99,
+      "observation_bearing_deg": 45.3,
+      "inspected_clue": null,
+      "agent_mode": "RESCUING",
+      "agent_reasoning": "VISUAL CONTACT CONFIRMED! EVE spotted at (14, 13). Executing direct approach to complete rescue protocol.",
+      "target_coord": [
+        14,
         13
       ],
       "belief_entropy": 0.0,
       "belief_peak_coord": [
-        15,
+        14,
+        13
+      ],
+      "belief_peak_prob": 1.0,
+      "inferred_status": "DORMANT_REBOOT_REQUIRED",
+      "status_message": "Moved to (13, 13)."
+    },
+    {
+      "step_number": 64,
+      "time_tick": 64,
+      "action": "MOVE_E",
+      "action_cost": 2,
+      "battery_before": 63,
+      "battery_after": 61,
+      "position": [
+        14,
+        13
+      ],
+      "observation_rssi": -43.99,
+      "observation_bearing_deg": 45.3,
+      "inspected_clue": null,
+      "agent_mode": "RESCUING",
+      "agent_reasoning": "VISUAL CONTACT CONFIRMED! EVE spotted at (14, 13). Executing direct approach to complete rescue protocol.",
+      "target_coord": [
+        14,
+        13
+      ],
+      "belief_entropy": 0.0,
+      "belief_peak_coord": [
+        14,
         13
       ],
       "belief_peak_prob": 1.0,

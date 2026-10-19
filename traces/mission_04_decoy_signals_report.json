@@ -2,46 +2,46 @@
   "mission_name": "Mission 04: Rogue Decoy Beacon",
   "metrics": {
     "outcome": "SUCCESS_FOUND_EVE",
-    "total_steps": 21,
-    "time_ticks": 21,
+    "total_steps": 18,
+    "time_ticks": 18,
     "initial_battery": 90,
-    "final_battery": 44,
-    "battery_consumed": 46,
+    "final_battery": 48,
+    "battery_consumed": 42,
     "recharge_events": 0,
-    "total_distance_traveled": 17.0,
+    "total_distance_traveled": 13.0,
     "clues_found": 2,
     "initial_entropy": 4.422,
-    "final_entropy": 0.099,
-    "entropy_reduction_pct": 97.8,
+    "final_entropy": 0.0,
+    "entropy_reduction_pct": 100.0,
     "best_estimate": [
-      15,
+      13,
       3
     ],
-    "best_estimate_confidence_pct": 98.72,
+    "best_estimate_confidence_pct": 100.0,
     "credible_radius": 0.0,
     "inferred_status": "DORMANT_REBOOT_REQUIRED",
-    "localization_error_euclidean": 2.0
+    "localization_error_euclidean": 0.0
   },
-  "recommended_next_step": "Initiate physical interface protocol at coordinates (15, 3). Connect auxiliary solar jumper cable and broadcast reboot authorization code 2105-A.",
+  "recommended_next_step": "Initiate physical interface protocol at coordinates (13, 3). Connect auxiliary solar jumper cable and broadcast reboot authorization code 2105-A.",
   "top_candidates": [
     {
       "coord": [
-        15,
+        13,
         3
       ],
-      "prob": 0.9872
+      "prob": 1.0
     },
     {
       "coord": [
-        15,
-        2
+        0,
+        0
       ],
-      "prob": 0.0128
+      "prob": 0.0
     },
     {
       "coord": [
-        15,
-        4
+        0,
+        1
       ],
       "prob": 0.0
     }

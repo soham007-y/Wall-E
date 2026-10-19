@@ -45,19 +45,35 @@ class AutonomousWallEAgent:
         self.steps_since_last_scan: int = 0
         self.current_mode: str = "EXPLORATION"
         self.last_scanned_pos: Optional[Tuple[int, int]] = None
+        self.last_action: Optional[ActionType] = None
         self.latest_summary: BeliefSummary = self.belief.get_summary()
+
+    def _return_decision(self, decision: AgentDecision) -> AgentDecision:
+        """Cache last action and return decision."""
+        self.last_action = decision.action
+        return decision
 
     def decide_action(self, obs: Observation) -> AgentDecision:
         """Process observation, update belief, and decide next action with explicit reasoning."""
         self.visited_tiles.add(obs.position)
 
         # 1. Update internal map with visible tiles
+        eve_spotted_coord: Optional[Tuple[int, int]] = None
         for tile_coord, tile_type in obs.visible_tiles.items():
             if tile_type == "#":
                 self.known_obstacles.add(tile_coord)
                 self.belief.mark_obstacle(tile_coord)
             elif tile_type == "R":
                 self.known_recharge_stations.add(tile_coord)
+            elif tile_type == "E":
+                eve_spotted_coord = tile_coord
+
+        # If EVE is visually identified, update belief with 100% confidence
+        if eve_spotted_coord is not None:
+            for coord in self.belief.grid:
+                self.belief.grid[coord] = 1.0 if coord == eve_spotted_coord else 0.0
+            self.belief._normalize()
+            self.belief.entropy_history.append(self.belief.compute_entropy())
 
         # 2. Update Bayesian belief with sensor reading
         # If WALL-E is on this cell and EVE was not found, this cell cannot be EVE
@@ -65,7 +81,10 @@ class AutonomousWallEAgent:
             self.belief.grid[obs.position] = 0.0
             self.belief._normalize()
 
-        if obs.rssi is not None and obs.position != self.last_scanned_pos:
+        # Only incorporate sensor measurements on initial spawn (last_action is None)
+        # or immediately following an explicit SCAN action.
+        is_fresh_scan = (self.last_action is None) or (self.last_action == ActionType.SCAN)
+        if is_fresh_scan and obs.rssi is not None and eve_spotted_coord is None:
             self.belief.update_sensor_measurement(obs.position, obs.rssi, obs.bearing_deg)
             self.last_scanned_pos = obs.position
 
@@ -79,19 +98,37 @@ class AutonomousWallEAgent:
         self.latest_summary = self.belief.get_summary()
         summary = self.latest_summary
 
-        # 4. Check if currently at a recharge station
+        # 4. Immediate Rescue: If EVE is visually spotted in immediate proximity, move to rescue her!
+        if eve_spotted_coord is not None and obs.position != eve_spotted_coord:
+            if obs.battery >= self.config.resources.move_cost:
+                path_res = self.planner.astar(obs.position, eve_spotted_coord, self.known_obstacles)
+                if path_res.found and len(path_res.path) > 1:
+                    next_step = path_res.path[1]
+                    action = self._step_to_action(obs.position, next_step)
+                    self.current_mode = "RESCUING"
+                    return self._return_decision(AgentDecision(
+                        action=action,
+                        reasoning=(
+                            f"VISUAL CONTACT CONFIRMED! EVE spotted at {eve_spotted_coord}. "
+                            f"Executing direct approach to complete rescue protocol."
+                        ),
+                        mode="RESCUING",
+                        target_coord=eve_spotted_coord,
+                    ))
+
+        # 5. Check if currently at a recharge station
         if obs.at_recharge_station:
             battery_pct = obs.battery / self.config.resources.max_battery
             if battery_pct < 0.90:
                 self.current_mode = "RECHARGING"
-                return AgentDecision(
+                return self._return_decision(AgentDecision(
                     action=ActionType.RECHARGE,
                     reasoning=f"Solar recharging active. Battery at {obs.battery}% ({battery_pct*100:.0f}% capacity). Restoring energy reserves.",
                     mode="RECHARGING",
                     target_coord=obs.position,
-                )
+                ))
 
-        # 5. Check Battery Safety Margin (Point of No Return)
+        # 6. Check Battery Safety Margin (Point of No Return)
         is_critical, return_cost, nearest_station = self.planner.check_battery_safety(
             obs.position,
             obs.battery,
@@ -105,7 +142,7 @@ class AutonomousWallEAgent:
             if path_res.found and len(path_res.path) > 1:
                 next_step = path_res.path[1]
                 action = self._step_to_action(obs.position, next_step)
-                return AgentDecision(
+                return self._return_decision(AgentDecision(
                     action=action,
                     reasoning=(
                         f"BATTERY CRITICAL: Battery at {obs.battery}%, return cost to station at {nearest_station} is {return_cost}. "
@@ -113,24 +150,24 @@ class AutonomousWallEAgent:
                     ),
                     mode="RETREAT_TO_RECHARGE",
                     target_coord=nearest_station,
-                )
+                ))
 
-        # 6. Clue Inspection: If uninspected clue is immediately adjacent, INSPECT it!
+        # 7. Clue Inspection: If uninspected clue is immediately adjacent, INSPECT it!
         if obs.nearby_clue_available:
             self.current_mode = "INSPECTING_CLUE"
-            return AgentDecision(
+            return self._return_decision(AgentDecision(
                 action=ActionType.INSPECT,
                 reasoning="Proximity radar detected physical clue or telemetry beacon signature. Deciphering clue payload.",
                 mode="INSPECTING_CLUE",
                 target_coord=obs.position,
-            )
+            ))
 
-        # 7. Triangulation Scan: If agent moved sufficiently far or needs fresh reading
+        # 8. Triangulation Scan: If agent moved sufficiently far or needs fresh reading
         if self.steps_since_last_scan >= 4 and obs.battery >= 25 and summary.entropy > 2.5:
             self.steps_since_last_scan = 0
             self.last_scanned_pos = obs.position
             self.current_mode = "TRIANGULATING"
-            return AgentDecision(
+            return self._return_decision(AgentDecision(
                 action=ActionType.SCAN,
                 reasoning=(
                     f"Belief entropy is {summary.entropy:.2f} bits. Dispatched directional radar ping "
@@ -138,9 +175,9 @@ class AutonomousWallEAgent:
                 ),
                 mode="TRIANGULATING",
                 target_coord=obs.position,
-            )
+            ))
 
-        # 8. Target Arbitration & Navigation
+        # 9. Target Arbitration & Navigation
         best_coord = summary.best_estimate
         self.current_mode = "CONVERGING" if summary.max_prob > 0.30 else "EXPLORING"
 
@@ -149,12 +186,12 @@ class AutonomousWallEAgent:
             # At target! If EVE is here, action will confirm, else scan
             if self.steps_since_last_scan > 0:
                 self.steps_since_last_scan = 0
-                return AgentDecision(
+                return self._return_decision(AgentDecision(
                     action=ActionType.SCAN,
                     reasoning=f"Arrived at peak candidate {best_coord}. Scanning to confirm EVE beacon signature.",
                     mode="CONFIRMING",
                     target_coord=best_coord,
-                )
+                ))
 
         # Plan path to best candidate
         target_dest = self._select_exploration_target(obs.position, summary)
@@ -164,7 +201,7 @@ class AutonomousWallEAgent:
             next_step = path_res.path[1]
             action = self._step_to_action(obs.position, next_step)
             self.steps_since_last_scan += 1
-            return AgentDecision(
+            return self._return_decision(AgentDecision(
                 action=action,
                 reasoning=(
                     f"Navigating toward high-likelihood target {target_dest} (peak {summary.max_prob*100:.1f}%, entropy {summary.entropy:.2f}). "
@@ -172,16 +209,16 @@ class AutonomousWallEAgent:
                 ),
                 mode=self.current_mode,
                 target_coord=target_dest,
-            )
+            ))
 
         # Fallback: scan if no path found
         self.steps_since_last_scan = 0
-        return AgentDecision(
+        return self._return_decision(AgentDecision(
             action=ActionType.SCAN,
             reasoning="Path blocked or target reached; initiating deep scan to refresh belief distribution.",
             mode="SCANNING",
             target_coord=obs.position,
-        )
+        ))
 
     def _select_exploration_target(
         self,

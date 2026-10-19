@@ -2,13 +2,13 @@
   "mission_name": "Mission 01: Initial Signal Beacon",
   "metrics": {
     "outcome": "SUCCESS_FOUND_EVE",
-    "total_steps": 67,
-    "time_ticks": 67,
+    "total_steps": 21,
+    "time_ticks": 21,
     "initial_battery": 100,
-    "final_battery": 67,
-    "battery_consumed": 123,
-    "recharge_events": 6,
-    "total_distance_traveled": 60.0,
+    "final_battery": 57,
+    "battery_consumed": 43,
+    "recharge_events": 0,
+    "total_distance_traveled": 20.0,
     "clues_found": 1,
     "initial_entropy": 2.054,
     "final_entropy": 0.0,
@@ -33,15 +33,15 @@
     },
     {
       "coord": [
-        10,
-        9
+        0,
+        0
       ],
       "prob": 0.0
     },
     {
       "coord": [
-        9,
-        9
+        0,
+        1
       ],
       "prob": 0.0
     }

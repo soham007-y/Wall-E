@@ -102,6 +102,21 @@ class TestPlannerAndAgent(unittest.TestCase):
         self.assertEqual(decision.action, ActionType.INSPECT)
         self.assertEqual(decision.mode, "INSPECTING_CLUE")
 
+    def test_agent_visual_contact_rescues_eve(self):
+        # WALL-E at (8, 9), sees EVE at (8, 8) within 10x10 grid bounds
+        obs = Observation(
+            position=(8, 9),
+            battery=60,
+            time_tick=20,
+            visible_tiles={(8, 8): "E", (8, 9): "."}
+        )
+        decision = self.agent.decide_action(obs)
+        self.assertEqual(decision.action, ActionType.MOVE_N)
+        self.assertEqual(decision.mode, "RESCUING")
+        self.assertEqual(decision.target_coord, (8, 8))
+        self.assertEqual(self.agent.belief.grid[(8, 8)], 1.0)
+        self.assertEqual(self.agent.latest_summary.best_estimate, (8, 8))
+
 
 if __name__ == "__main__":
     unittest.main()
